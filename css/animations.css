@@ -1,0 +1,187 @@
+/* ============================================================
+   BachatBeat — animations.css
+   Pulse line, count-up, transitions
+   ============================================================ */
+
+/* ─── Pulse / ECG Line ────────────────────────────────────── */
+@keyframes pulse-draw {
+  from { stroke-dashoffset: var(--dash-len, 800); }
+  to   { stroke-dashoffset: 0; }
+}
+
+.pulse-svg {
+  display: block;
+}
+
+.pulse-path {
+  fill: none;
+  stroke: var(--color-teal);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: var(--dash-len, 800);
+  stroke-dashoffset: var(--dash-len, 800);
+  animation: pulse-draw 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 0.3s;
+}
+
+.pulse-path-amber {
+  stroke: var(--color-amber);
+}
+
+/* After-draw glow loop */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.pulse-path.animated-loop {
+  animation: pulse-draw 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+             pulse-glow 2.5s ease-in-out 2.1s infinite;
+}
+
+/* Topbar entry pulse line */
+#topbar-pulse-line {
+  fill: none;
+  stroke: var(--color-teal);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: topbar-pulse-draw 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 0.5s;
+  opacity: 0.5;
+}
+
+@keyframes topbar-pulse-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Fade in upward for dashboard elements */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.45s ease forwards;
+}
+
+.fade-up-1 { animation-delay: 0.05s; opacity: 0; }
+.fade-up-2 { animation-delay: 0.12s; opacity: 0; }
+.fade-up-3 { animation-delay: 0.19s; opacity: 0; }
+.fade-up-4 { animation-delay: 0.26s; opacity: 0; }
+.fade-up-5 { animation-delay: 0.33s; opacity: 0; }
+.fade-up-6 { animation-delay: 0.40s; opacity: 0; }
+
+/* Count-up: elements that should animate numbers */
+.count-val {
+  transition: opacity 0.3s ease;
+}
+
+/* Smooth panel reveal */
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+.slide-down {
+  animation: slide-down 0.35s ease forwards;
+}
+
+/* Score gauge circle fill animation */
+@keyframes gauge-fill {
+  from { stroke-dashoffset: 283; }
+  to   { stroke-dashoffset: var(--target-offset, 0); }
+}
+
+.gauge-circle {
+  animation: gauge-fill 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 0.3s;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+}
+
+/* Loading pulse for upload zone */
+@keyframes upload-pulse {
+  0%, 100% { border-color: var(--color-teal); }
+  50% { border-color: var(--color-emerald); }
+}
+
+.upload-zone.processing {
+  animation: upload-pulse 1s ease infinite;
+  background: rgba(29,158,117,0.07);
+}
+
+/* Attention flash for urgent items */
+@keyframes urgent-flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.urgency-dot.urgent {
+  animation: urgent-flash 2s ease infinite;
+}
+
+/* Bar fill animation trigger class */
+.bar-fill {
+  width: 0%;
+}
+
+.bar-fill.animate {
+  width: var(--bar-w, 0%);
+}
+
+/* Page transition */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateX(8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.page-enter {
+  animation: page-enter 0.25s ease forwards;
+}
+
+/* Shimmer loading skeleton */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--color-sage) 25%,
+    var(--color-white) 50%,
+    var(--color-sage) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* Expand/collapse for accordion */
+.expand-body {
+  animation: slide-down 0.25s ease forwards;
+}
+
+/* Modal entrance */
+@keyframes modal-enter {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal {
+  animation: modal-enter 0.2s ease forwards;
+}

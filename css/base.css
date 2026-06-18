@@ -1,0 +1,155 @@
+/* ============================================================
+   BachatBeat — base.css
+   Design tokens, reset, typography
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* ─── Design Tokens ─────────────────────────────────────── */
+:root {
+  --color-emerald:      #0F6E56;
+  --color-emerald-dark: #0A4F3E;
+  --color-emerald-light:#1A8A6A;
+  --color-teal:         #1D9E75;
+  --color-teal-light:   #2EC490;
+  --color-bg:           #FAF8F4;
+  --color-text:         #1A1F1C;
+  --color-text-muted:   #6B7575;
+  --color-text-faint:   #9AABAA;
+  --color-amber:        #C97A2E;
+  --color-amber-light:  #F5E6D3;
+  --color-red:          #C0392B;
+  --color-red-light:    #FDECEA;
+  --color-green:        #1B7A55;
+  --color-green-light:  #DFF0E8;
+  --color-sage:         #E8EFE9;
+  --color-sage-dark:    #D4E2D6;
+  --color-white:        #FFFFFF;
+  --color-border:       #D8E0D9;
+  --color-border-faint: #ECF1EC;
+
+  --shadow-sm:  0 1px 3px rgba(15,110,86,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:  0 4px 12px rgba(15,110,86,0.10), 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-lg:  0 8px 24px rgba(15,110,86,0.12), 0 4px 8px rgba(0,0,0,0.06);
+
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  20px;
+
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', 'Courier New', monospace;
+
+  --sidebar-w: 240px;
+  --sidebar-w-collapsed: 64px;
+  --topbar-h: 60px;
+
+  --transition-fast: 0.15s ease;
+  --transition-med:  0.25s ease;
+  --transition-slow: 0.4s ease;
+}
+
+/* ─── Reset ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.55;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--color-teal);
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+input, select, textarea {
+  font-family: var(--font-body);
+}
+
+/* ─── Typography ─────────────────────────────────────────── */
+.text-xs    { font-size: 0.75rem; }
+.text-sm    { font-size: 0.85rem; }
+.text-base  { font-size: 1rem; }
+.text-lg    { font-size: 1.125rem; }
+.text-xl    { font-size: 1.35rem; }
+.text-2xl   { font-size: 1.65rem; }
+.text-3xl   { font-size: 2rem; }
+
+.font-mono  { font-family: var(--font-mono); }
+.font-500   { font-weight: 500; }
+.font-600   { font-weight: 600; }
+.font-700   { font-weight: 700; }
+.font-800   { font-weight: 800; }
+
+.text-muted  { color: var(--color-text-muted); }
+.text-faint  { color: var(--color-text-faint); }
+.text-emerald{ color: var(--color-emerald); }
+.text-teal   { color: var(--color-teal); }
+.text-amber  { color: var(--color-amber); }
+.text-red    { color: var(--color-red); }
+.text-green  { color: var(--color-green); }
+
+/* ─── Financial number formatting ───────────────────────── */
+.fin-num {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.fin-num-lg {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 1.6rem;
+  letter-spacing: -0.03em;
+}
+
+.fin-num-xl {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 2.2rem;
+  letter-spacing: -0.04em;
+}
+
+/* ─── Focus states ────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-faint); }
+
+/* ─── Reduced Motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
