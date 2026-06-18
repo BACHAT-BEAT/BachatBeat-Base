@@ -5,10 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="BachatBeat — Financial pulse analytics for Indian financial professionals. Identify trapped capital across insurance, FDs, mutual funds, and loans."/>
   <title>BachatBeat — Financial Pulse Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Barlow+Condensed:ital,wght@0,500;0,700;0,800;0,900;1,700&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/base.css"/>
   <link rel="stylesheet" href="css/layout.css"/>
   <link rel="stylesheet" href="css/components.css"/>
   <link rel="stylesheet" href="css/animations.css"/>
+  <link rel="stylesheet" href="css/dark-theme.css"/>
   <style>
     /* ── Onboarding-specific styles ─────────────────────── */
     .onboard-card {
@@ -175,17 +179,15 @@
 
   <!-- Sidebar -->
   <nav id="sidebar" role="navigation" aria-label="Main navigation">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-        </svg>
+    <a href="landing.html" class="sidebar-logo" title="Back to Home" style="text-decoration:none">
+      <div class="sidebar-logo-icon" aria-hidden="true" style="overflow:hidden;padding:0;border-radius:10px">
+        <img src="logo.jpg" alt="BachatBeat" style="width:100%;height:100%;object-fit:cover;display:block"/>
       </div>
       <div class="sidebar-logo-text">
-        <div class="sidebar-logo-name">BachatBeat</div>
+        <div class="sidebar-logo-name" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:-0.03em;color:#fff;">BachatBeat</div>
         <div class="sidebar-logo-tagline">Financial Pulse</div>
       </div>
-    </div>
+    </a>
 
     <div class="sidebar-nav">
       <!-- Main -->
@@ -277,10 +279,12 @@
     <div class="topbar-role-badge" id="topbar-role-badge">RIA</div>
 
     <div class="topbar-profile" id="topbar-profile" role="button" tabindex="0" aria-label="Profile menu" aria-haspopup="true">
-      <div class="topbar-avatar" id="profile-avatar">MP</div>
+      <div class="topbar-avatar" id="profile-avatar" style="background:none;overflow:hidden;border:1.5px solid var(--color-teal)">
+        <img src="founder.jpg" alt="Profile" style="width:100%;height:100%;object-fit:cover;display:block"/>
+      </div>
       <div class="topbar-profile-info">
-        <div class="topbar-profile-name" id="profile-name">My Practice</div>
-        <div class="topbar-profile-role" id="profile-role">SEBI RIA</div>
+        <div class="topbar-profile-name" id="profile-name">Aryan Patel</div>
+        <div class="topbar-profile-role" id="profile-role">Founder</div>
       </div>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <polyline points="6 9 12 15 18 9"/>
@@ -349,6 +353,13 @@
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
     });
   });
+
+  // Mock Authentication: update name from localStorage
+  const storedUser = localStorage.getItem('bb_user');
+  if(storedUser) {
+    document.getElementById('profile-name').textContent = storedUser;
+    // Keep 'Founder' as role or change it based on logic, leaving as is for now
+  }
 
   // Init app
   window.addEventListener('DOMContentLoaded', () => App.init());

@@ -19,9 +19,18 @@ const App = {
     // Check if already onboarded
     const savedRole = sessionStorage.getItem('bb_role');
     const savedFirm = sessionStorage.getItem('bb_firm');
+    const bbUser = localStorage.getItem('bb_user');
+
     if (savedRole) {
       this.state.role = savedRole;
       this.state.firmName = savedFirm || 'My Practice';
+      this.showDashboard();
+    } else if (bbUser) {
+      // Auto-onboard if logged in from landing page
+      this.state.role = 'advisor';
+      this.state.firmName = bbUser;
+      sessionStorage.setItem('bb_role', 'advisor');
+      sessionStorage.setItem('bb_firm', bbUser);
       this.showDashboard();
     } else {
       this.showOnboarding();

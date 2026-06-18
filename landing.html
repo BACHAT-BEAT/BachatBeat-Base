@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="BachatBeat — India's first trapped capital detection platform. Free your money from underperforming instruments."/>
+  <title>BachatBeat — Free Your Trapped Capital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Barlow+Condensed:ital,wght@0,500;0,700;0,800;0,900;1,700&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    /* ═══════════════════════════════════════════════════
+       TOKENS
+    ═══════════════════════════════════════════════════ */
+    :root {
+      --navy:    #080f1e;
+      --navy2:   #0d1626;
+      --navy3:   #101c30;
+      --teal:    #00e5b0;
+      --teal2:   #00c99a;
+      --tglow:   rgba(0,229,176,0.18);
+      --tsoft:   rgba(0,229,176,0.07);
+      --gold:    #f5c842;
+      --rose:    #ff5a7e;
+      --purple:  #9b7bfa;
+      --w:       #ffffff;
+      --w80:     rgba(255,255,255,.80);
+      --w60:     rgba(255,255,255,.60);
+      --w40:     rgba(255,255,255,.40);
+      --w20:     rgba(255,255,255,.20);
+      --w10:     rgba(255,255,255,.10);
+      --w05:     rgba(255,255,255,.05);
+      --bd:      rgba(0,229,176,.14);
+      --bds:     rgba(255,255,255,.07);
+      --fb:      'Barlow Condensed', 'Syne', sans-serif;
+      --fi:      'Inter', system-ui, sans-serif;
+      --fm:      'JetBrains Mono', monospace;
+      --r1:6px;--r2:12px;--r3:20px;--r4:28px;--r5:40px;--rf:999px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;overflow-x:hidden}
+    body{background:var(--navy);color:var(--w);font-family:var(--fi);line-height:1.6;overflow-x:hidden;cursor:none}
+    a{color:inherit;text-decoration:none}
+    button{cursor:none;border:none;outline:none;font-family:var(--fi)}
+    input,textarea,select{font-family:var(--fi);cursor:none}
+    ::selection{background:var(--teal);color:var(--navy)}
+
+    /* ═══════════════════════════════════════════════════
+       CUSTOM CURSOR
+    ═══════════════════════════════════════════════════ */
+    #cur-ring{position:fixed;width:36px;height:36px;border:2px solid var(--teal);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s,border-color .2s;mix-blend-mode:normal}
+    #cur-dot{position:fixed;width:6px;height:6px;background:var(--teal);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);box-shadow:0 0 8px var(--teal)}
+    #cur-ring.hov{width:54px;height:54px;background:rgba(0,229,176,.06)}
+    #cur-ring.clk{transform:translate(-50%,-50%) scale(.7)}
+    .coin-pop{position:fixed;pointer-events:none;z-index:99998;font-size:13px;opacity:0;animation:cpop .8s ease-out forwards}
+    @keyframes cpop{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,calc(-50% - 55px)) scale(.3) rotate(360deg)}}
+
+    /* ═══════════════════════════════════════════════════
+       SCROLL REVEAL
+    ═══════════════════════════════════════════════════ */
+    [data-reveal]{opacity:0;transform:translateY(34px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1)}
+    [data-reveal="left"]{transform:translateX(-44px)}
+    [data-reveal="right"]{transform:translateX(44px)}
+    [data-reveal="scale"]{transform:scale(.9)}
+    [data-reveal].vis{opacity:1;transform:none}
+    [data-d="1"]{transition-delay:.1s}[data-d="2"]{transition-delay:.2s}[data-d="3"]{transition-delay:.32s}
+    [data-d="4"]{transition-delay:.44s}[data-d="5"]{transition-delay:.56s}[data-d="6"]{transition-delay:.68s}
+
+    /* ═══════════════════════════════════════════════════
+       ANIMATED COIN (SVG — no image)
+    ═══════════════════════════════════════════════════ */
+    #float-coin{
+      position:fixed;right:28px;top:50%;
+      transform:translateY(-50%);
+      z-index:5;pointer-events:none;
+      width:200px;height:200px;
+      filter:drop-shadow(0 0 30px rgba(245,200,66,.4)) drop-shadow(0 20px 40px rgba(0,0,0,.5));
+      animation:coin-bob 4s ease-in-out infinite;
+      will-change:transform;
+    }
+    @keyframes coin-bob{
+      0%,100%{filter:drop-shadow(0 0 30px rgba(245,200,66,.4)) drop-shadow(0 20px 40px rgba(0,0,0,.5))}
+      50%{filter:drop-shadow(0 0 55px rgba(245,200,66,.65)) drop-shadow(0 30px 60px rgba(0,0,0,.5))}
+    }
+    @media(max-width:1100px){#float-coin{display:none}}
+
+    /* ═══════════════════════════════════════════════════
+       GRID NOISE BG
+    ═══════════════════════════════════════════════════ */
+    body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.35}
+
+    /* ═══════════════════════════════════════════════════
+       NAVBAR
+    ═══════════════════════════════════════════════════ */
+    #navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 44px;height:68px;background:rgba(8,15,30,.72);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--bds);transition:all .3s ease}
+    #navbar.sc{background:rgba(8,15,30,.97);border-bottom-color:var(--bd);box-shadow:0 4px 36px rgba(0,0,0,.5)}
+    .nav-logo{display:flex;align-items:center;gap:10px}
+    .nav-logo-img{width:40px;height:40px;border-radius:10px;overflow:hidden;flex-shrink:0;border:1.5px solid var(--bd)}
+    .nav-logo-img img{width:100%;height:100%;object-fit:cover}
+    .nav-brand{font-family:var(--fb);font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--teal),#7fffd4 50%,var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.03em}
+    .nav-links{display:flex;align-items:center;gap:4px}
+    .nav-link{padding:7px 14px;border-radius:var(--rf);font-size:.875rem;font-weight:500;color:var(--w60);transition:all .2s ease}
+    .nav-link:hover{color:var(--w);background:var(--w05)}
+    .nav-trial{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.25);border-radius:var(--rf);font-size:.7rem;font-weight:700;color:var(--gold);letter-spacing:.04em;text-transform:uppercase;margin-right:8px}
+    .nav-login{padding:8px 20px;border:1.5px solid var(--bd);color:var(--teal);font-weight:600;font-size:.875rem;border-radius:var(--rf);background:transparent;transition:all .2s ease;margin-right:8px}
+    .nav-login:hover{background:var(--tsoft);border-color:var(--teal)}
+    .nav-cta{padding:9px 22px;background:var(--teal);color:var(--navy);font-weight:700;font-size:.875rem;border-radius:var(--rf);transition:all .2s ease;box-shadow:0 0 20px rgba(0,229,176,.3)}
+    .nav-cta:hover{background:var(--teal2);box-shadow:0 0 36px rgba(0,229,176,.5);transform:translateY(-1px)}
+
+    /* ═══════════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════════ */
+    #hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 24px 90px;overflow:hidden}
+    .h-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,176,.034) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,176,.034) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 80% at center,black,transparent)}
+    .gl{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none}
+    .gl1{width:700px;height:700px;background:radial-gradient(circle,rgba(0,229,176,.09),transparent 70%);top:-200px;left:50%;transform:translateX(-50%)}
+    .gl2{width:380px;height:380px;background:radial-gradient(circle,rgba(155,123,250,.07),transparent 70%);bottom:0;right:-80px}
+    .gl3{width:260px;height:260px;background:radial-gradient(circle,rgba(255,90,126,.05),transparent 70%);bottom:80px;left:-50px}
+    #particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+    .ptl{position:absolute;border-radius:50%;background:var(--teal);opacity:0;animation:floatp 9s ease-in-out infinite}
+    @keyframes floatp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.5}90%{opacity:.2}100%{transform:translateY(-30px) scale(1);opacity:0}}
+
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 17px;background:var(--tsoft);border:1px solid var(--bd);border-radius:var(--rf);font-size:.76rem;font-weight:600;color:var(--teal);letter-spacing:.05em;text-transform:uppercase;margin-bottom:30px;position:relative;z-index:1}
+    .pdot{width:7px;height:7px;background:var(--teal);border-radius:50%;animation:pd 2s infinite}
+    @keyframes pd{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+
+    .hero-logo{width:108px;height:108px;border-radius:22px;overflow:hidden;margin:0 auto 28px;border:2px solid rgba(0,229,176,.22);box-shadow:0 0 56px rgba(0,229,176,.18),0 24px 60px rgba(0,0,0,.6);position:relative;z-index:1;animation:lf 5s ease-in-out infinite}
+    @keyframes lf{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+    .hero-logo img{width:100%;height:100%;object-fit:cover}
+
+    /* Brand name using Syne — no image */
+    .hero-brand{font-family:var(--fb);font-size:clamp(2.6rem,6vw,4.8rem);font-weight:800;letter-spacing:-.04em;line-height:1;position:relative;z-index:1;margin-bottom:10px;background:linear-gradient(135deg,var(--teal) 0%,#7fffd4 40%,var(--teal) 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% auto;animation:bgs 4s ease infinite}
+    @keyframes bgs{0%{background-position:0 center}50%{background-position:100% center}100%{background-position:0 center}}
+
+    .hero-tagline{font-family:var(--fb);font-size:clamp(1.3rem,3vw,2.2rem);font-weight:600;color:var(--w80);position:relative;z-index:1;margin-bottom:18px;letter-spacing:-.02em;line-height:1.2}
+    .hero-tagline em{font-style:italic;color:rgba(255,255,255,.45)}
+
+    .hero-sub{font-size:clamp(.95rem,1.8vw,1.1rem);color:var(--w40);max-width:540px;margin:0 auto 42px;line-height:1.78;position:relative;z-index:1}
+    .hero-sub strong{color:var(--w70,rgba(255,255,255,.7));font-weight:600}
+    .hero-ctas{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;position:relative;z-index:1;margin-bottom:14px}
+    .trial-note{font-size:.74rem;color:var(--w40);position:relative;z-index:1;margin-bottom:52px}
+    .trial-note span{color:var(--teal);font-weight:600}
+
+    .btn-p{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:var(--teal);color:var(--navy);font-weight:700;font-size:.95rem;border-radius:var(--rf);transition:all .25s ease;box-shadow:0 0 30px rgba(0,229,176,.38),0 4px 18px rgba(0,0,0,.3)}
+    .btn-p:hover{background:var(--teal2);box-shadow:0 0 50px rgba(0,229,176,.58);transform:translateY(-2px)}
+    .btn-s{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border:1.5px solid var(--w20);color:var(--w80);font-weight:600;font-size:.95rem;border-radius:var(--rf);background:var(--w05);backdrop-filter:blur(10px);transition:all .25s ease}
+    .btn-s:hover{border-color:var(--teal);color:var(--teal);background:var(--tsoft)}
+
+    .h-stats{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+    .st-chip{text-align:center}
+    .st-num{font-family:var(--fb);font-size:2rem;font-weight:800;color:var(--teal);line-height:1}
+    .st-lbl{font-size:.74rem;color:var(--w40);text-transform:uppercase;letter-spacing:.07em;margin-top:4px}
+    .st-div{width:1px;background:var(--w10);align-self:stretch}
+
+    .h-pulse{position:absolute;bottom:0;left:0;right:0;height:54px;overflow:hidden}
+    .h-pulse svg{width:100%;height:100%}
+    .pp{stroke:var(--teal);stroke-width:1.5;fill:none;opacity:.24;stroke-dasharray:2200;stroke-dashoffset:2200;animation:drawp 3s ease forwards .8s}
+    @keyframes drawp{to{stroke-dashoffset:0}}
+
+    /* ═══════════════════════════════════════════════════
+       LAYOUT HELPERS
+    ═══════════════════════════════════════════════════ */
+    .ctr{max-width:1100px;margin:0 auto}
+    .sec{padding:96px 24px}
+    .sl{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+    .st{font-family:var(--fb);font-size:clamp(1.9rem,3.6vw,2.9rem);font-weight:800;line-height:1.12;letter-spacing:-.03em;margin-bottom:16px}
+    .ss{color:var(--w40);font-size:.95rem;max-width:500px;line-height:1.76}
+    .sep{width:44px;height:2px;background:linear-gradient(90deg,var(--teal),transparent);border-radius:2px;margin:12px 0 16px}
+    .sep.c{margin:12px auto 16px}
+    .tc{text-align:center}
+
+    /* ═══════════════════════════════════════════════════
+       TRAPPED CAPITAL
+    ═══════════════════════════════════════════════════ */
+    #trapped{background:linear-gradient(180deg,var(--navy) 0%,var(--navy2) 100%)}
+    .cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:52px}
+    @media(max-width:700px){.cap-grid{grid-template-columns:1fr}}
+    .cap-card{background:var(--navy3);border:1px solid var(--bds);border-radius:20px;padding:26px;position:relative;overflow:hidden;transition:all .35s ease}
+    .cap-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--tsoft),transparent);opacity:0;transition:opacity .35s}
+    .cap-card:hover::before{opacity:1}
+    .cap-card:hover{border-color:var(--teal);transform:translateY(-4px);box-shadow:0 18px 52px rgba(0,0,0,.35),0 0 32px var(--tglow)}
+    .ci{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:16px}
+    .ci-t{background:rgba(0,229,176,.1)} .ci-g{background:rgba(245,200,66,.1)}
+    .ci-r{background:rgba(255,90,126,.1)} .ci-p{background:rgba(155,123,250,.1)}
+    .cap-card h3{font-family:var(--fb);font-size:1.12rem;font-weight:700;margin-bottom:8px}
+    .cap-card p{font-size:.865rem;color:var(--w40);line-height:1.65}
+    .cap-ft{margin-top:16px;padding-top:13px;border-top:1px solid var(--w05);display:flex;align-items:center;justify-content:space-between}
+    .cap-amt{font-family:var(--fb);font-size:1.3rem;font-weight:800;color:var(--teal)}
+    .lp{font-size:.7rem;padding:4px 10px;border-radius:var(--rf);font-weight:700}
+    .lp-r{background:rgba(255,90,126,.12);color:var(--rose)} .lp-g{background:rgba(245,200,66,.1);color:var(--gold)}
+
+    .dash-mock{margin-top:60px;border-radius:28px;overflow:hidden;border:1px solid var(--bd);box-shadow:0 40px 100px rgba(0,0,0,.65),0 0 64px var(--tglow)}
+    .mk-bar{background:#0b1524;padding:11px 16px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--bd)}
+    .md{width:10px;height:10px;border-radius:50%}
+    .mk-body{background:#08111f;padding:22px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+    @media(max-width:540px){.mk-body{grid-template-columns:1fr}}
+    .mw{background:var(--navy3);border:1px solid var(--bds);border-radius:12px;padding:15px}
+    .mw-l{font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--w40);margin-bottom:6px}
+    .mw-v{font-family:var(--fb);font-size:1.5rem;font-weight:800;color:var(--teal)}
+    .mw-s{font-size:.7rem;color:var(--rose);margin-top:3px}
+    .mc{background:var(--navy3);border:1px solid var(--bds);border-radius:12px;padding:15px;grid-column:span 2}
+    @media(max-width:540px){.mc{grid-column:span 1}}
+    .cbars{display:flex;align-items:flex-end;gap:6px;height:68px;margin-top:9px}
+    .cb{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--teal),rgba(0,229,176,.22))}
+
+    /* ═══════════════════════════════════════════════════
+       LOGIN / SIGNUP
+    ═══════════════════════════════════════════════════ */
+    #login-s{background:var(--navy2);position:relative;overflow:hidden}
+    #login-s::before{content:'';position:absolute;top:-180px;right:-120px;width:500px;height:500px;background:radial-gradient(circle,rgba(0,229,176,.06),transparent 70%);border-radius:50%;pointer-events:none}
+    .login-lay{display:grid;grid-template-columns:1fr 1fr;gap:68px;align-items:center}
+    @media(max-width:840px){.login-lay{grid-template-columns:1fr;gap:44px}}
+    .login-card{background:var(--navy3);border:1px solid var(--bd);border-radius:28px;padding:38px;box-shadow:0 28px 72px rgba(0,0,0,.44)}
+    .card-logo{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+    .card-logo-img{width:36px;height:36px;border-radius:9px;overflow:hidden;border:1.5px solid var(--bd)}
+    .card-logo-img img{width:100%;height:100%;object-fit:cover}
+    .card-brand{font-family:var(--fb);font-size:1.15rem;font-weight:800;background:linear-gradient(135deg,var(--teal),#7fffd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .login-title{font-family:var(--fb);font-size:1.5rem;font-weight:800;margin-bottom:5px;letter-spacing:-.02em}
+    .login-sub{font-size:.83rem;color:var(--w40);margin-bottom:24px}
+    .trial-rb{background:linear-gradient(135deg,rgba(245,200,66,.1),rgba(245,200,66,.05));border:1px solid rgba(245,200,66,.22);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:9px;margin-bottom:18px}
+    .trial-rb-ico{font-size:1.1rem}
+    .trial-rb-txt{font-size:.8rem;color:var(--gold);font-weight:600}
+    .trial-rb-txt span{color:var(--w40);font-weight:400}
+    .ff{margin-bottom:14px}
+    .fl{font-size:.77rem;font-weight:600;color:var(--w60);margin-bottom:6px;display:block;letter-spacing:.02em}
+    .fi{width:100%;padding:11px 15px;background:rgba(255,255,255,.04);border:1.5px solid var(--bds);border-radius:10px;color:var(--w);font-size:.88rem;transition:all .2s}
+    .fi:focus{outline:none;border-color:var(--teal);background:var(--tsoft);box-shadow:0 0 0 3px rgba(0,229,176,.1)}
+    .fi::placeholder{color:var(--w20)}
+    .fs{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2300e5b0' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px}
+    .fr{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+    .btn-f{width:100%;padding:12px;background:var(--teal);color:var(--navy);font-weight:700;font-size:.95rem;border-radius:10px;margin-top:5px;transition:all .2s;box-shadow:0 4px 16px rgba(0,229,176,.24)}
+    .btn-f:hover{background:var(--teal2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,229,176,.36)}
+    .fdiv{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--w20);font-size:.77rem}
+    .fdiv::before,.fdiv::after{content:'';flex:1;height:1px;background:var(--bds)}
+    .btn-soc{width:100%;padding:11px;border:1.5px solid var(--bds);background:var(--w05);color:var(--w80);font-weight:500;font-size:.875rem;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:9px;transition:all .2s}
+    .btn-soc:hover{border-color:var(--w20);background:var(--w10)}
+    .feat-list{display:flex;flex-direction:column;gap:20px}
+    .fi-item{display:flex;gap:15px;align-items:flex-start}
+    .fi-icon{width:44px;height:44px;border-radius:12px;background:var(--tsoft);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+    .fi-txt h4{font-family:var(--fb);font-weight:700;font-size:.95rem;margin-bottom:3px}
+    .fi-txt p{font-size:.83rem;color:var(--w40);line-height:1.62}
+
+    /* ═══════════════════════════════════════════════════
+       PRICING
+    ═══════════════════════════════════════════════════ */
+    #pricing{background:var(--navy)}
+    .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px}
+    @media(max-width:840px){.price-grid{grid-template-columns:1fr}}
+    .pc{background:var(--navy3);border:1px solid var(--bds);border-radius:26px;padding:30px 26px;position:relative;overflow:hidden;transition:all .3s ease}
+    .pc.pop{border-color:var(--teal);background:linear-gradient(145deg,rgba(0,229,176,.07),var(--navy3))}
+    .pc:hover{transform:translateY(-5px);box-shadow:0 22px 60px rgba(0,0,0,.4)}
+    .pop-badge{position:absolute;top:18px;right:18px;background:var(--teal);color:var(--navy);font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;border-radius:var(--rf)}
+    .ptier{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--w40);margin-bottom:10px}
+    .pname{font-family:var(--fb);font-size:1.45rem;font-weight:800;margin-bottom:5px}
+    .pprice{display:flex;align-items:baseline;gap:4px;margin-bottom:5px}
+    .pprice-n{font-size:2.1rem;font-weight:700;color:var(--w)}
+    .pprice-p{font-size:.8rem;color:var(--w40)}
+    .ptrial{font-size:.76rem;color:var(--gold);margin-bottom:18px;font-weight:600}
+    .ptools{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+    .ptool{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:var(--w05);border:1px solid var(--bds);border-radius:var(--rf);font-size:.7rem;color:var(--w60);font-weight:500}
+    .pdivd{height:1px;background:var(--bds);margin:16px 0}
+    .pfts{display:flex;flex-direction:column;gap:9px}
+    .pft{display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:var(--w60)}
+    .pft::before{content:'✓';color:var(--teal);font-weight:700;flex-shrink:0}
+    .btn-pl{width:100%;margin-top:22px;padding:11px;border-radius:10px;font-weight:700;font-size:.875rem;transition:all .2s}
+    .bpl-o{border:1.5px solid var(--bd);background:transparent;color:var(--teal)}
+    .bpl-o:hover{background:var(--tsoft)}
+    .bpl-f{background:var(--teal);color:var(--navy);border:none;box-shadow:0 4px 16px rgba(0,229,176,.28)}
+    .bpl-f:hover{background:var(--teal2);transform:translateY(-1px)}
+    .bpl-pu{background:linear-gradient(135deg,var(--purple),var(--teal));color:var(--w);border:none;box-shadow:0 4px 16px rgba(155,123,250,.28)}
+    .bpl-pu:hover{box-shadow:0 8px 26px rgba(155,123,250,.45);transform:translateY(-1px)}
+
+    /* ═══════════════════════════════════════════════════
+       WAITLIST
+    ═══════════════════════════════════════════════════ */
+    #waitlist{background:linear-gradient(180deg,var(--navy2),var(--navy))}
+    .wl-in{max-width:600px;margin:0 auto}
+    .wl-card{background:linear-gradient(145deg,rgba(0,229,176,.07),rgba(8,15,30,.5));border:1px solid var(--bd);border-radius:38px;padding:52px 42px;position:relative;overflow:hidden}
+    .wl-card::before{content:'';position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:260px;height:260px;background:radial-gradient(circle,rgba(0,229,176,.12),transparent 70%);pointer-events:none}
+    .wl-cnt{display:inline-flex;align-items:center;gap:8px;background:var(--tsoft);border:1px solid var(--bd);border-radius:var(--rf);padding:6px 17px;font-size:.77rem;font-weight:600;color:var(--teal);margin-bottom:20px}
+    .wl-form{display:flex;gap:10px;margin-top:26px}
+    @media(max-width:480px){.wl-form{flex-direction:column}}
+    .wl-in2{flex:1;padding:12px 17px;background:var(--w05);border:1.5px solid var(--bds);border-radius:var(--rf);color:var(--w);font-size:.875rem;transition:all .2s}
+    .wl-in2:focus{outline:none;border-color:var(--teal);background:var(--tsoft)}
+    .wl-in2::placeholder{color:var(--w20)}
+    .btn-wl{padding:12px 24px;background:var(--teal);color:var(--navy);font-weight:700;font-size:.875rem;border-radius:var(--rf);white-space:nowrap;transition:all .2s;box-shadow:0 0 20px rgba(0,229,176,.32)}
+    .btn-wl:hover{background:var(--teal2);box-shadow:0 0 36px rgba(0,229,176,.52);transform:translateY(-1px)}
+    .wl-note{font-size:.74rem;color:var(--w30,rgba(255,255,255,.3));margin-top:11px}
+    .wl-perks{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+    .wperk{display:flex;align-items:center;gap:6px;font-size:.79rem;color:var(--w40)}
+    .wperk svg{color:var(--teal);flex-shrink:0}
+
+    /* ═══════════════════════════════════════════════════
+       EQUITY / SCRATCH
+    ═══════════════════════════════════════════════════ */
+    #equity{background:var(--navy);position:relative;overflow:hidden}
+    .eq-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.055}
+    .scrl{position:absolute;width:1.5px;height:100%;background:linear-gradient(180deg,transparent,var(--teal),transparent);animation:scrln 3.5s ease-in-out infinite}
+    .scrl:nth-child(1){left:8%;animation-delay:0s;animation-duration:3s}
+    .scrl:nth-child(2){left:22%;animation-delay:.5s;animation-duration:3.8s}
+    .scrl:nth-child(3){left:40%;animation-delay:1s;animation-duration:2.9s}
+    .scrl:nth-child(4){left:58%;animation-delay:1.4s;animation-duration:4s}
+    .scrl:nth-child(5){left:74%;animation-delay:.7s;animation-duration:3.2s}
+    .scrl:nth-child(6){left:90%;animation-delay:1.8s;animation-duration:3.5s}
+    @keyframes scrln{0%{transform:translateY(-100%);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(100vh);opacity:0}}
+    .eq-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:960px;margin:52px auto 0}
+    @media(max-width:700px){.eq-cards{grid-template-columns:1fr}}
+    .eqc{position:relative;border-radius:26px;overflow:hidden;cursor:pointer;transition:all .4s cubic-bezier(.16,1,.3,1)}
+    .eqc:hover{transform:translateY(-7px) scale(1.015)}
+    .eq-scr{position:absolute;inset:0;background:linear-gradient(135deg,#1e3050,#152540);border:1.5px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:11px;z-index:2;transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .45s ease}
+    .eqc.rev .eq-scr{transform:rotateY(90deg);opacity:0;pointer-events:none}
+    .si{font-size:1.85rem;animation:wiggle 2s ease-in-out infinite}
+    @keyframes wiggle{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+    .sh{font-size:.7rem;color:var(--w40);letter-spacing:.06em;text-transform:uppercase}
+    .eq-in{background:linear-gradient(145deg,var(--navy2),var(--navy3));border:1.5px solid var(--bd);border-radius:26px;padding:30px 24px;min-height:272px;display:flex;flex-direction:column;position:relative}
+    .et{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:var(--rf);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;align-self:flex-start}
+    .et-m{background:rgba(155,123,250,.12);color:var(--purple);border:1px solid rgba(155,123,250,.2)}
+    .et-v{background:rgba(245,200,66,.1);color:var(--gold);border:1px solid rgba(245,200,66,.2)}
+    .et-j{background:var(--tsoft);color:var(--teal);border:1px solid var(--bd)}
+    .eq-in h3{font-family:var(--fb);font-size:1.35rem;font-weight:800;margin-bottom:9px;letter-spacing:-.02em}
+    .eq-in p{font-size:.83rem;color:var(--w40);line-height:1.65;flex:1}
+    .eq-ft{margin-top:18px;padding-top:14px;border-top:1px solid var(--bds);display:flex;align-items:center;justify-content:space-between}
+    .eq-lbl{font-size:.68rem;color:var(--w30,rgba(255,255,255,.3));text-transform:uppercase;letter-spacing:.08em}
+    .eq-pct{font-family:var(--fb);font-size:1.05rem;font-weight:800;color:var(--teal)}
+    .btn-eq{margin-top:13px;width:100%;padding:10px;border-radius:9px;font-weight:700;font-size:.82rem;border:1.5px solid var(--bd);background:transparent;color:var(--teal);transition:all .2s}
+    .btn-eq:hover{background:var(--tsoft);border-color:var(--teal)}
+
+    /* ═══════════════════════════════════════════════════
+       API / ENTERPRISE
+    ═══════════════════════════════════════════════════ */
+    #api{background:linear-gradient(180deg,var(--navy),#060d1a)}
+    .api-tag{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;background:rgba(155,123,250,.1);border:1px solid rgba(155,123,250,.2);border-radius:var(--rf);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:16px}
+    .api-lay{display:grid;grid-template-columns:1fr 1fr;gap:68px;align-items:start;margin-top:56px}
+    @media(max-width:840px){.api-lay{grid-template-columns:1fr;gap:40px}}
+    .cwin{background:#060e1f;border:1px solid rgba(155,123,250,.2);border-radius:18px;overflow:hidden;box-shadow:0 26px 68px rgba(0,0,0,.55)}
+    .cwin-bar{background:#0b1626;padding:10px 15px;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(155,123,250,.1)}
+    .ctabs{display:flex;gap:5px;margin-left:9px}
+    .ctab{padding:3px 10px;border-radius:var(--r1);font-size:.68rem;font-weight:600;color:var(--w40);cursor:pointer;transition:all .2s}
+    .ctab.act{background:rgba(155,123,250,.14);color:var(--purple)}
+    .cdbody{padding:20px;font-family:var(--fm);font-size:.76rem;line-height:1.85;color:#e2e8f0;overflow-x:auto}
+    .cl{display:flex;gap:13px}.cln{color:#2d3f5c;user-select:none;min-width:16px;text-align:right}
+    .kw{color:#9b7bfa}.fn{color:#00e5b0}.str{color:#f5c842}.num{color:#ff5a7e}.cm{color:#2d3f5c;font-style:italic}.obj{color:#93c5fd}
+    .api-feats{display:flex;flex-direction:column;gap:13px;margin-top:26px}
+    .af{display:flex;gap:12px;align-items:flex-start;padding:15px 16px;background:var(--w05);border:1px solid var(--bds);border-radius:10px;transition:all .2s}
+    .af:hover{border-color:rgba(155,123,250,.28);background:rgba(155,123,250,.04)}
+    .af-i{width:34px;height:34px;border-radius:9px;background:rgba(155,123,250,.1);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+    .af-t h4{font-weight:600;font-size:.85rem;margin-bottom:2px}
+    .af-t p{font-size:.76rem;color:var(--w40)}
+    .api-plans{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:32px}
+    @media(max-width:460px){.api-plans{grid-template-columns:1fr}}
+    .ap{padding:20px;background:var(--w05);border:1px solid var(--bds);border-radius:16px;transition:all .3s}
+    .ap.feat{background:linear-gradient(145deg,rgba(155,123,250,.09),rgba(0,229,176,.04));border-color:rgba(155,123,250,.22)}
+    .ap:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(0,0,0,.3)}
+    .ap-n{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--w40);margin-bottom:6px}
+    .ap-p{font-family:var(--fb);font-size:1.6rem;font-weight:800;color:var(--w);margin-bottom:2px}
+    .ap-p span{font-size:.8rem;font-weight:400;color:var(--w40)}
+    .ap-t{font-size:.7rem;color:var(--gold);font-weight:600;margin-bottom:14px}
+    .ap-fs{display:flex;flex-direction:column;gap:7px}
+    .apf{font-size:.76rem;color:rgba(255,255,255,.5);display:flex;gap:7px;align-items:center}
+    .apf::before{content:'✓';color:var(--teal);font-weight:700}
+
+    /* ═══════════════════════════════════════════════════
+       COMING SOON
+    ═══════════════════════════════════════════════════ */
+    #coming{background:var(--navy2);position:relative;overflow:hidden}
+    #coming::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:440px;height:440px;background:radial-gradient(circle,rgba(155,123,250,.06),transparent 70%);border-radius:50%;pointer-events:none}
+    .com-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px}
+    @media(max-width:840px){.com-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:500px){.com-grid{grid-template-columns:1fr}}
+    .com-card{background:var(--navy3);border:1px solid var(--bds);border-radius:18px;padding:24px 22px;transition:all .3s;position:relative;overflow:hidden}
+    .com-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(155,123,250,.04),transparent);opacity:0;transition:opacity .3s}
+    .com-card:hover::after{opacity:1}
+    .com-card:hover{border-color:rgba(155,123,250,.28);transform:translateY(-3px)}
+    .cs-tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:rgba(155,123,250,.1);border:1px solid rgba(155,123,250,.18);border-radius:var(--rf);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--purple);margin-bottom:13px}
+    .com-ico{font-size:1.55rem;margin-bottom:11px}
+    .com-card h4{font-family:var(--fb);font-size:1rem;font-weight:700;margin-bottom:7px;letter-spacing:-.01em}
+    .com-card p{font-size:.8rem;color:var(--w40);line-height:1.62}
+    .com-q{font-size:.68rem;color:var(--purple);font-weight:600;margin-top:13px;text-transform:uppercase;letter-spacing:.05em}
+
+    /* ═══════════════════════════════════════════════════
+       FAQ
+    ═══════════════════════════════════════════════════ */
+    #faq{background:var(--navy2)}
+    .faq-in{max-width:700px;margin:0 auto}
+    .faq-list{display:flex;flex-direction:column;gap:9px}
+    .faqitem{background:var(--navy3);border:1px solid var(--bds);border-radius:11px;overflow:hidden;transition:all .3s}
+    .faqitem.op{border-color:var(--teal)}
+    .faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;padding:17px 20px;text-align:left;font-size:.9rem;font-weight:600;color:var(--w);background:transparent;cursor:pointer;transition:color .2s;gap:13px}
+    .faq-q:hover,.faqitem.op .faq-q{color:var(--teal)}
+    .faq-chev{width:17px;height:17px;flex-shrink:0;transition:transform .3s;color:var(--w40)}
+    .faqitem.op .faq-chev{transform:rotate(180deg);color:var(--teal)}
+    .faq-ans{max-height:0;overflow:hidden;transition:max-height .4s ease}
+    .faqitem.op .faq-ans{max-height:260px}
+    .faq-ans-in{padding:0 20px 16px;font-size:.83rem;color:var(--w40);line-height:1.76}
+
+    /* ═══════════════════════════════════════════════════
+       CONTACT
+    ═══════════════════════════════════════════════════ */
+    #contact{background:var(--navy);text-align:center;position:relative;overflow:hidden}
+    .cgl{position:absolute;width:460px;height:460px;background:radial-gradient(circle,rgba(0,229,176,.07),transparent 70%);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+    .cont-in{max-width:500px;margin:0 auto;position:relative}
+    .cont-email{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;background:var(--tsoft);border:1px solid var(--bd);border-radius:var(--rf);font-size:1rem;font-weight:700;color:var(--teal);margin-top:22px;transition:all .3s}
+    .cont-email:hover{background:var(--tglow);box-shadow:0 0 34px var(--tglow);transform:translateY(-2px)}
+    .founder-card{margin-top:44px;display:inline-flex;align-items:center;gap:18px;padding:22px 28px;background:var(--navy3);border:1px solid var(--bd);border-radius:24px;text-align:left;transition:all .3s}
+    .founder-card:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.4),0 0 30px var(--tglow)}
+    .founder-photo{width:62px;height:62px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--teal);box-shadow:0 0 20px rgba(0,229,176,.25)}
+    .founder-photo img{width:100%;height:100%;object-fit:cover;object-position:center top}
+    .founder-name{font-family:var(--fb);font-size:1.05rem;font-weight:800}
+    .founder-role{font-size:.77rem;color:var(--w40);margin-top:2px}
+    .founder-email{font-size:.77rem;color:var(--teal);margin-top:3px}
+
+    /* ═══════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════ */
+    footer{padding:34px 44px;background:#040a14;border-top:1px solid var(--bds);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+    .foot-brand{font-family:var(--fb);font-size:1.15rem;font-weight:800;background:linear-gradient(135deg,var(--teal),#7fffd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .foot-sub{font-size:.73rem;color:var(--w30,rgba(255,255,255,.3));margin-top:3px}
+    .foot-links{display:flex;gap:16px;flex-wrap:wrap}
+    .foot-link{font-size:.76rem;color:var(--w40);transition:color .2s}
+    .foot-link:hover{color:var(--teal)}
+
+    /* ═══════════════════════════════════════════════════
+       LOGIN MODAL
+    ═══════════════════════════════════════════════════ */
+    .modal-ov{position:fixed;inset:0;background:rgba(8,15,30,.88);backdrop-filter:blur(18px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .3s}
+    .modal-ov.open{opacity:1;pointer-events:all}
+    .modal{background:var(--navy2);border:1px solid var(--bd);border-radius:26px;padding:38px;width:100%;max-width:410px;position:relative;transform:scale(.94) translateY(18px);transition:transform .35s cubic-bezier(.16,1,.3,1);box-shadow:0 30px 72px rgba(0,0,0,.65)}
+    .modal-ov.open .modal{transform:scale(1) translateY(0)}
+    .modal-cls{position:absolute;top:13px;right:13px;width:28px;height:28px;border-radius:50%;background:var(--w10);color:var(--w40);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+    .modal-cls:hover{background:var(--w20);color:var(--w)}
+
+    /* Toast */
+    .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--navy3);border:1px solid var(--teal);border-radius:var(--rf);padding:12px 24px;display:flex;align-items:center;gap:9px;font-size:.875rem;font-weight:600;color:var(--w);z-index:3000;box-shadow:0 8px 26px rgba(0,0,0,.4),0 0 26px var(--tglow);transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .3s;opacity:0}
+    .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+    @media(max-width:768px){
+      #navbar{padding:0 18px}
+      .nav-links{display:none}
+      footer{flex-direction:column;align-items:flex-start}
+    }
+
+    /* ═══════════════════════════════════════════════════
+       FIFA WORLD CUP DESIGN OVERLAY
+       Hexagons · Pitch Lines · Stadium Beams · Bold Type
+    ═══════════════════════════════════════════════════ */
+
+    /* ── Hexagonal soccer-ball grid background ── */
+    .hex-grid {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+      opacity: .045;
+    }
+    .hex-grid svg { width: 100%; height: 100%; }
+
+    /* ── Stadium spotlight beams ── */
+    .stadium-beams {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .beam {
+      position: absolute;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(0,229,176,0) 0%, rgba(0,229,176,.35) 40%, rgba(0,229,176,0) 100%);
+      transform-origin: top center;
+      animation: beamSweep var(--dur, 8s) ease-in-out infinite;
+      opacity: 0;
+    }
+    .beam:nth-child(1){left:15%;height:65vh;top:0;--dur:7s;animation-delay:0s}
+    .beam:nth-child(2){left:35%;height:55vh;top:0;--dur:9s;animation-delay:1.5s}
+    .beam:nth-child(3){left:55%;height:70vh;top:0;--dur:6.5s;animation-delay:3s}
+    .beam:nth-child(4){left:75%;height:60vh;top:0;--dur:8.5s;animation-delay:4.5s}
+    .beam:nth-child(5){right:5%;height:50vh;top:0;--dur:7.5s;animation-delay:2s}
+    @keyframes beamSweep{
+      0%{opacity:0;transform:rotate(-6deg)}
+      20%{opacity:1}
+      50%{opacity:.6;transform:rotate(6deg)}
+      80%{opacity:1}
+      100%{opacity:0;transform:rotate(-6deg)}
+    }
+
+    /* ── Pitch centre circle ── */
+    .pitch-ring {
+      position: absolute;
+      width: 480px; height: 480px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0,229,176,.06);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none; z-index: 0;
+      animation: ringPulse 5s ease-in-out infinite;
+    }
+    .pitch-ring:nth-child(2){ width: 320px; height: 320px; border-color: rgba(0,229,176,.1); animation-delay: .8s; }
+    .pitch-ring:nth-child(3){ width: 680px; height: 680px; border-color: rgba(0,229,176,.03); animation-delay: 1.6s; }
+    @keyframes ringPulse{
+      0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1}
+      50%{transform:translate(-50%,-50%) scale(1.035);opacity:.6}
+    }
+
+    /* ── Pitch horizontal lines (like penalty box) ── */
+    .pitch-lines {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 120px; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .pitch-lines::before, .pitch-lines::after {
+      content: '';
+      position: absolute; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,229,176,.12), transparent);
+    }
+    .pitch-lines::before { bottom: 40px; }
+    .pitch-lines::after  { bottom: 80px; }
+
+    /* ── World Cup matchday ticker strip ── */
+    #wc-ticker {
+      position: relative; z-index: 10;
+      background: linear-gradient(90deg, rgba(0,229,176,.08), rgba(155,123,250,.06), rgba(0,229,176,.08));
+      border-top: 1px solid rgba(0,229,176,.12);
+      border-bottom: 1px solid rgba(0,229,176,.12);
+      overflow: hidden;
+      padding: 8px 0;
+      margin-top: -1px;
+    }
+    .ticker-inner {
+      display: flex; gap: 60px; white-space: nowrap;
+      animation: tickerScroll 28s linear infinite;
+    }
+    .ticker-inner:hover { animation-play-state: paused; }
+    @keyframes tickerScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--fb); font-size: .78rem; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      color: rgba(255,255,255,.5);
+    }
+    .ticker-item .ball { font-size: .7rem; }
+    .ticker-item .live { color: var(--teal); }
+    .ticker-item .score { color: var(--w); font-weight: 800; }
+
+    /* ── Bento stats grid (hero stats) ── */
+    .bento-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .bento-chip {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(0,229,176,.1);
+      border-radius: 18px;
+      padding: 18px 20px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all .3s;
+      position: relative; overflow: hidden;
+    }
+    .bento-chip::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      opacity: 0; transition: opacity .3s;
+    }
+    .bento-chip:hover { border-color: rgba(0,229,176,.28); transform: translateY(-3px); }
+    .bento-chip:hover::before { opacity: 1; }
+    .bento-num {
+      font-family: 'Barlow Condensed', var(--fb);
+      font-size: 2.4rem; font-weight: 900; font-style: italic;
+      color: var(--teal); line-height: 1;
+      text-shadow: 0 0 24px rgba(0,229,176,.4);
+    }
+    .bento-lbl {
+      font-size: .68rem; color: rgba(255,255,255,.4);
+      text-transform: uppercase; letter-spacing: .09em; margin-top: 5px;
+    }
+
+    /* ── World Cup section header style ── */
+    .wc-heading {
+      font-family: 'Barlow Condensed', var(--fb) !important;
+      font-weight: 900 !important; font-style: italic;
+      letter-spacing: -.02em !important;
+      line-height: 1 !important;
+      text-transform: uppercase;
+    }
+
+    /* ── WC trophy divider ── */
+    .wc-divider {
+      display: flex; align-items: center; gap: 16px;
+      margin: 0 auto 44px; max-width: 600px;
+    }
+    .wc-divider-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,229,176,.2), transparent);
+    }
+    .wc-divider-icon {
+      font-size: .8rem; color: rgba(255,255,255,.25);
+      letter-spacing: .12em; text-transform: uppercase; font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* ── Nav badge soccer style ── */
+    .nav-trial {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px;
+      background: rgba(245,200,66,.1);
+      border: 1px solid rgba(245,200,66,.25);
+      border-radius: var(--rf);
+      font-size: .7rem; font-weight: 800;
+      color: var(--gold);
+      letter-spacing: .05em; text-transform: uppercase;
+      margin-right: 8px;
+      font-family: 'Barlow Condensed', sans-serif;
+    }
+    .nav-trial .ball-icon {
+      width: 14px; height: 14px; flex-shrink: 0;
+    }
+
+    /* ── Section sport badge ── */
+    .sport-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px;
+      background: rgba(0,229,176,.06);
+      border: 1px solid rgba(0,229,176,.15);
+      border-radius: var(--rf);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .75rem; font-weight: 800;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+    .sport-badge svg { opacity: .7; }
+
+    /* ── Hexagon card accent ── */
+    .hex-accent {
+      position: absolute; top: -18px; right: -18px;
+      width: 60px; height: 60px; opacity: .07;
+    }
+
+    /* ── Glassmorphic price card upgrade ── */
+    .pc.pop {
+      background: linear-gradient(145deg,rgba(0,229,176,.09),rgba(155,123,250,.04)) !important;
+    }
+    .pc.pop .pop-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-style: italic;
+      letter-spacing: .08em;
+      font-size: .72rem;
+    }
+
+    /* ── Hero brand upgrade ── */
+    .hero-brand {
+      font-family: 'Barlow Condensed', 'Syne', sans-serif !important;
+      font-style: italic !important;
+      font-size: clamp(3rem,7vw,5.6rem) !important;
+      font-weight: 900 !important;
+      letter-spacing: -.02em !important;
+    }
+
+    /* ── WC stat scoreboard ticker in hero ── */
+    .wc-live-strip {
+      display: inline-flex; align-items: center; gap: 18px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: var(--rf);
+      padding: 5px 16px;
+      font-family: 'Barlow Condensed', monospace;
+      font-size: .82rem; font-weight: 700;
+      color: rgba(255,255,255,.5);
+      margin-bottom: 28px; position: relative; z-index: 1;
+    }
+    .wc-live-strip .live-dot {
+      width: 7px; height: 7px; background: var(--rose);
+      border-radius: 50%; animation: pd 1.4s infinite;
+      box-shadow: 0 0 8px var(--rose);
+    }
+    .wc-live-strip .sep { color: rgba(255,255,255,.15); }
+    .wc-live-strip .hi { color: var(--teal); font-weight: 800; }
+  </style>
+</head>
+<body>
+
+<!-- ── Custom cursor ── -->
+<div id="cur-ring"></div>
+<div id="cur-dot"></div>
+
+<!-- ══════════════════════════════════════
+     ANIMATED SVG COIN (no image, CSS+SVG)
+══════════════════════════════════════ -->
+<div id="float-coin">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="coinFace" cx="40%" cy="35%" r="65%">
+        <stop offset="0%" stop-color="#ffe066"/>
+        <stop offset="40%" stop-color="#f5c842"/>
+        <stop offset="80%" stop-color="#c8952a"/>
+        <stop offset="100%" stop-color="#a06820"/>
+      </radialGradient>
+      <radialGradient id="coinEdge" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#e0a820"/>
+        <stop offset="100%" stop-color="#8a5c10"/>
+      </radialGradient>
+      <filter id="coinGlow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <!-- Rotation animation -->
+      <animateTransform xmlns="http://www.w3.org/2000/svg"/>
+    </defs>
+
+    <!-- Coin shadow -->
+    <ellipse cx="100" cy="192" rx="52" ry="6" fill="rgba(0,0,0,.35)">
+      <animate attributeName="ry" values="6;4;6" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".35;.2;.35" dur="4s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Edge (3D effect) -->
+    <ellipse cx="100" cy="103" rx="72" ry="11" fill="url(#coinEdge)"/>
+
+    <!-- Coin body -->
+    <ellipse cx="100" cy="97" rx="72" ry="72" fill="url(#coinFace)" filter="url(#coinGlow)">
+      <animate attributeName="ry" values="72;74;72" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="97;91;97" dur="4s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Shine highlight -->
+    <ellipse cx="80" cy="74" rx="26" ry="14" fill="rgba(255,255,220,.32)" transform="rotate(-20,80,74)"/>
+
+    <!-- Outer ring -->
+    <circle cx="100" cy="97" r="62" fill="none" stroke="rgba(200,149,42,.6)" stroke-width="3">
+      <animate attributeName="cy" values="97;91;97" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="100" cy="97" r="55" fill="none" stroke="rgba(200,149,42,.3)" stroke-width="1.5">
+      <animate attributeName="cy" values="97;91;97" dur="4s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Rupee symbol ₹ -->
+    <g>
+      <animate attributeName="transform" type="translate" values="0 0;0 -6;0 0" dur="4s" repeatCount="indefinite"/>
+      <!-- Horizontal bars of ₹ -->
+      <line x1="82" y1="78" x2="118" y2="78" stroke="#3a1a00" stroke-width="5.5" stroke-linecap="round"/>
+      <line x1="82" y1="88" x2="118" y2="88" stroke="#3a1a00" stroke-width="5.5" stroke-linecap="round"/>
+      <!-- Vertical stem -->
+      <line x1="88" y1="78" x2="88" y2="120" stroke="#3a1a00" stroke-width="5.5" stroke-linecap="round"/>
+      <!-- Diagonal -->
+      <line x1="88" y1="88" x2="115" y2="120" stroke="#3a1a00" stroke-width="5.5" stroke-linecap="round"/>
+      <!-- Top serif bump -->
+      <path d="M88,78 Q110,78 112,87 Q112,96 88,88" fill="#3a1a00"/>
+    </g>
+
+    <!-- Glow ring outside coin -->
+    <circle cx="100" cy="97" r="78" fill="none" stroke="rgba(245,200,66,.15)" stroke-width="12">
+      <animate attributeName="cy" values="97;91;97" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".15;.35;.15" dur="4s" repeatCount="indefinite"/>
+    </circle>
+  </svg>
+</div>
+
+<!-- ══════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════ -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-img">
+      <img src="logo.jpg" alt="BachatBeat Logo"/>
+    </div>
+    <span class="nav-brand">BachatBeat</span>
+  </a>
+  <div class="nav-links">
+    <a href="#trapped"  class="nav-link">Platform</a>
+    <a href="#pricing"  class="nav-link">Pricing</a>
+    <a href="#equity"   class="nav-link">Invest</a>
+    <a href="#api"      class="nav-link">API</a>
+    <a href="#faq"      class="nav-link">FAQ</a>
+    <a href="#contact"  class="nav-link">Contact</a>
+    <div class="nav-trial"><div class="ball-icon">⚽</div> 7-Day Free Trial</div>
+    <button class="nav-login" onclick="openLogin()">Log In</button>
+    <a href="#waitlist" class="nav-cta">Join Waitlist →</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section id="hero">
+  <!-- Hexagonal soccer ball grid -->
+  <div class="hex-grid" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <defs>
+        <pattern id="hexPattern" x="0" y="0" width="80" height="92" patternUnits="userSpaceOnUse">
+          <polygon points="40,2 74,21 74,71 40,90 6,71 6,21" fill="none" stroke="rgba(0,229,176,1)" stroke-width="1"/>
+          <polygon points="0,46 34,65 34,115 0,134 -34,115 -34,65" fill="none" stroke="rgba(0,229,176,1)" stroke-width="1"/>
+          <polygon points="80,46 114,65 114,115 80,134 46,115 46,65" fill="none" stroke="rgba(0,229,176,1)" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#hexPattern)"/>
+    </svg>
+  </div>
+  <!-- Stadium spotlight beams -->
+  <div class="stadium-beams" aria-hidden="true">
+    <div class="beam"></div>
+    <div class="beam"></div>
+    <div class="beam"></div>
+    <div class="beam"></div>
+    <div class="beam"></div>
+  </div>
+  <!-- Pitch centre rings -->
+  <div class="pitch-ring" aria-hidden="true"></div>
+  <div class="pitch-ring" aria-hidden="true"></div>
+  <div class="pitch-ring" aria-hidden="true"></div>
+  <div class="pitch-lines" aria-hidden="true"></div>
+  <div class="h-grid"></div>
+  <div class="gl gl1"></div>
+  <div class="gl gl2"></div>
+  <div class="gl gl3"></div>
+  <div id="particles"></div>
+
+  <!-- Live scoreboard strip -->
+  <div class="wc-live-strip" data-reveal>
+    <div class="live-dot"></div>
+    <span>Live Matchday</span>
+    <span class="sep">|</span>
+    <span><span class="hi">2,841</span> on waitlist</span>
+    <span class="sep">|</span>
+    <span>Beta launching <span class="hi">Q4 2025</span></span>
+    <span class="sep">|</span>
+    <span>Free for <span class="hi">7 days</span></span>
+  </div>
+
+  <div class="hero-badge" data-reveal>
+    <span class="pdot"></span>
+    India's First Trapped Capital Detector
+  </div>
+
+  <div class="hero-logo" data-reveal data-d="1">
+    <img src="logo.jpg" alt="BachatBeat"/>
+  </div>
+
+  <div class="hero-brand" data-reveal data-d="2">BachatBeat</div>
+
+  <h1 class="hero-tagline" data-reveal data-d="3">
+    Your money is trapped.<br/><em>We set it free.</em>
+  </h1>
+
+  <p class="hero-sub" data-reveal data-d="4">
+    BachatBeat scans your <strong>insurance, FDs, mutual funds &amp; loans</strong> to detect underperforming capital — and shows you exactly how to liberate it.
+  </p>
+
+  <div class="hero-ctas" data-reveal data-d="5">
+    <a href="#waitlist" class="btn-p">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Join the Waitlist
+    </a>
+    <button class="btn-s" onclick="openLogin()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Login to App
+    </button>
+  </div>
+  <div class="trial-note" data-reveal data-d="6">
+    <span>7-day free trial</span> — no credit card required. Cancel anytime.
+  </div>
+
+  <div class="h-stats" data-reveal data-d="6">
+    <div class="bento-stats">
+      <div class="bento-chip">
+        <div class="bento-num"><span class="counter" data-t="2.4">0</span>L Cr</div>
+        <div class="bento-lbl">Trapped in bad insurance</div>
+      </div>
+      <div class="bento-chip">
+        <div class="bento-num"><span class="counter" data-t="68">0</span>%</div>
+        <div class="bento-lbl">FDs below real inflation</div>
+      </div>
+      <div class="bento-chip">
+        <div class="bento-num">₹<span class="counter" data-t="3.2">0</span>L</div>
+        <div class="bento-lbl">Avg. capital freed / user</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="h-pulse">
+    <svg viewBox="0 0 1440 54" preserveAspectRatio="none">
+      <path class="pp" d="M0,27 L110,27 L128,9 L144,46 L156,4 L166,51 L176,27 L200,27 L300,27 L318,14 L330,40 L344,27 L500,27 L519,10 L534,44 L546,6 L556,50 L568,27 L620,27 L700,27 L718,14 L730,40 L744,27 L900,27 L919,10 L934,44 L946,6 L956,50 L968,27 L1020,27 L1100,27 L1117,16 L1129,39 L1143,27 L1300,27 L1319,12 L1334,44 L1347,6 L1357,50 L1369,27 L1440,27"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     TRAPPED CAPITAL
+══════════════════════════════════════ -->
+<section id="trapped" class="sec">
+  <div class="wc-divider"><div class="wc-divider-line"></div><div class="wc-divider-icon">World Cup Season Special</div><div class="wc-divider-line"></div></div>
+  <div class="ctr">
+    <div class="tc" data-reveal>
+      <div class="sport-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20A14.5 14.5 0 0 0 12 2"/><path d="M2 12h20"/></svg>
+        The Problem
+      </div>
+      <h2 class="st wc-heading">Your capital is silently rotting<br/>in the wrong instruments</h2>
+      <p class="ss" style="margin:0 auto">Millions of Indians are unknowingly trapped in financial instruments that destroy wealth. BachatBeat surfaces these blind spots in seconds.</p>
+    </div>
+
+    <div class="cap-grid">
+      <div class="cap-card" data-reveal="left" data-d="1">
+        <div class="ci ci-t">🛡️</div>
+        <h3>Endowment Insurance Plans</h3>
+        <p>ULIPs and endowments deliver 4–6% locked for 20+ years while charging hidden fees up to 35%. Your protection plan is silently destroying wealth.</p>
+        <div class="cap-ft"><div class="cap-amt">₹1.8L Cr</div><div class="lp lp-r">−11% real return</div></div>
+      </div>
+      <div class="cap-card" data-reveal="right" data-d="1">
+        <div class="ci ci-g">🏦</div>
+        <h3>Fixed Deposits Below Inflation</h3>
+        <p>At 7% pre-tax, 30% tax bracket, and 6.5% inflation — your FD's real return is near zero or negative. Yet ₹180L Cr sits here doing nothing.</p>
+        <div class="cap-ft"><div class="cap-amt">₹180L Cr</div><div class="lp lp-g">0.2% real return</div></div>
+      </div>
+      <div class="cap-card" data-reveal="left" data-d="2">
+        <div class="ci ci-r">💳</div>
+        <h3>Costly EMI Structures</h3>
+        <p>Personal loans at 18–24% APR and poorly structured home loan prepayments silently erode your net worth. BachatBeat quantifies the exact drag.</p>
+        <div class="cap-ft"><div class="cap-amt">₹9L families</div><div class="lp lp-r">₹85K/yr overpaid avg</div></div>
+      </div>
+      <div class="cap-card" data-reveal="right" data-d="2">
+        <div class="ci ci-p">📊</div>
+        <h3>Underperforming Mutual Funds</h3>
+        <p>78% of active funds underperform their benchmark over 10 years. Is your SIP actually growing wealth? BachatBeat benchmarks every scheme in real time.</p>
+        <div class="cap-ft"><div class="cap-amt">₹42L Cr</div><div class="lp lp-g">78% underperform</div></div>
+      </div>
+    </div>
+
+    <div class="dash-mock" data-reveal data-d="3">
+      <div class="mk-bar">
+        <div class="md" style="background:#ff5f57"></div>
+        <div class="md" style="background:#ffbd2e"></div>
+        <div class="md" style="background:#28c840"></div>
+        <span style="font-size:.68rem;color:rgba(255,255,255,.28);margin-left:10px;font-family:var(--fm)">app.bachatbeat.com/dashboard</span>
+      </div>
+      <div class="mk-body">
+        <div class="mw"><div class="mw-l">Trapped Capital</div><div class="mw-v">₹4.2L</div><div class="mw-s">↓ Identify &amp; Rescue</div></div>
+        <div class="mc">
+          <div class="mw-l">Portfolio Health Score</div>
+          <div class="mw-v" style="color:var(--gold)">62 / 100</div>
+          <div class="cbars">
+            <div class="cb" style="height:40%"></div><div class="cb" style="height:65%"></div>
+            <div class="cb" style="height:30%"></div><div class="cb" style="height:84%"></div>
+            <div class="cb" style="height:54%"></div><div class="cb" style="height:47%"></div>
+            <div class="cb" style="height:73%"></div><div class="cb" style="height:92%"></div>
+          </div>
+        </div>
+        <div class="mw"><div class="mw-l">Capital Freed</div><div class="mw-v">₹1.8L</div><div class="mw-s" style="color:var(--teal)">↑ This month</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     LOGIN / SIGNUP
+══════════════════════════════════════ -->
+<section id="login-s" class="sec">
+  <div class="ctr">
+    <div class="login-lay">
+      <div data-reveal="left">
+        <div class="sport-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Get Access
+        </div>
+        <h2 class="st wc-heading">Start your financial<br/><span style="color:var(--teal)">freedom journey</span></h2>
+        <p class="ss" style="margin-bottom:34px">Join thousands already reclaiming trapped capital. Takes 3 minutes. Your first 7 days are completely free.</p>
+        <div class="feat-list">
+          <div class="fi-item"><div class="fi-icon">⚡</div><div class="fi-txt"><h4>Instant Portfolio Scan</h4><p>Upload statements or enter policy numbers — analysis runs in under 60 seconds.</p></div></div>
+          <div class="fi-item"><div class="fi-icon">🔒</div><div class="fi-txt"><h4>Bank-Grade Security</h4><p>256-bit AES encryption, read-only access, zero data sold. Your data stays yours.</p></div></div>
+          <div class="fi-item"><div class="fi-icon">📈</div><div class="fi-txt"><h4>Actionable Recommendations</h4><p>Not just alerts — specific steps to switch, surrender, or restructure for maximum real returns.</p></div></div>
+        </div>
+      </div>
+      <div data-reveal="right">
+        <div class="login-card">
+          <div class="card-logo">
+            <div class="card-logo-img"><img src="logo.jpg" alt=""/></div>
+            <span class="card-brand">BachatBeat</span>
+          </div>
+          <div class="trial-rb">
+            <div class="trial-rb-ico">7D</div>
+            <div class="trial-rb-txt">7-day free trial <span>— then tools-based pricing from ₹0/mo</span></div>
+          </div>
+          <div class="login-title">Create your account</div>
+          <div class="login-sub">Free forever tier available · No credit card required</div>
+          <form onsubmit="handleSignup(event)">
+            <div class="fr">
+              <div class="ff"><label class="fl" for="fn">First Name</label><input type="text" id="fn" class="fi" placeholder="Aryan" required/></div>
+              <div class="ff"><label class="fl" for="ln">Last Name</label><input type="text" id="ln" class="fi" placeholder="Patel"/></div>
+            </div>
+            <div class="ff"><label class="fl" for="em">Email Address</label><input type="email" id="em" class="fi" placeholder="you@example.com" required/></div>
+            <div class="ff"><label class="fl" for="ro">I am a…</label>
+              <select id="ro" class="fi fs">
+                <option value="">Select your role</option>
+                <option>Individual Investor</option>
+                <option>SEBI Registered RIA</option>
+                <option>Mutual Fund Distributor</option>
+                <option>Insurance Advisor</option>
+                <option>CA / Tax Consultant</option>
+              </select>
+            </div>
+            <div class="ff"><label class="fl" for="pw">Password</label><input type="password" id="pw" class="fi" placeholder="Create a strong password" required/></div>
+            <button type="submit" class="btn-f">Start Free Trial →</button>
+          </form>
+          <div class="fdiv">or continue with</div>
+          <button class="btn-soc" onclick="handleSignup({preventDefault:()=>{}})">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115z"/><path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987z"/><path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21z"/><path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067z"/></svg>
+            Continue with Google
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     PRICING
+══════════════════════════════════════ -->
+<section id="pricing" class="sec">
+  <div class="ctr">
+    <div class="tc" data-reveal>
+      <div class="sport-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Simple Pricing
+      </div>
+      <h2 class="st wc-heading">Pay only for the<br/><span style="color:var(--teal)">tools you use</span></h2>
+      <p class="ss" style="margin:0 auto">Tools-based pricing — activate only what you need. Every plan starts with a 7-day free trial.</p>
+    </div>
+    <div class="price-grid">
+      <div class="pc" data-reveal="left" data-d="1">
+        <div class="ptier">Forever Free</div>
+        <div class="pname">Starter</div>
+        <div class="pprice"><div class="pprice-n">₹0</div><div class="pprice-p">/ month</div></div>
+        <div class="ptrial">✓ Free forever · no credit card</div>
+        <div class="ptools"><div class="ptool">📊 Portfolio Scan</div><div class="ptool">🔔 Basic Alerts</div></div>
+        <div class="pdivd"></div>
+        <div class="pfts">
+          <div class="pft">100 API calls / month</div>
+          <div class="pft">Basic trapped capital scan</div>
+          <div class="pft">Insurance analysis tool</div>
+          <div class="pft">1 portfolio / account</div>
+          <div class="pft">Community support</div>
+        </div>
+        <button class="btn-pl bpl-o" onclick="handleSignup({preventDefault:()=>{}})">Get Started Free</button>
+      </div>
+      <div class="pc pop" data-reveal data-d="2">
+        <div class="pop-badge">MOST POPULAR</div>
+        <div class="ptier">7-Day Free Trial</div>
+        <div class="pname">Pro</div>
+        <div class="pprice"><div class="pprice-n">₹999</div><div class="pprice-p">/ month</div></div>
+        <div class="ptrial">First 7 days free, then ₹999/mo</div>
+        <div class="ptools"><div class="ptool">📊 Deep Scan</div><div class="ptool">💳 Loan Tool</div><div class="ptool">📈 MF Benchmark</div></div>
+        <div class="pdivd"></div>
+        <div class="pfts">
+          <div class="pft">5,000 API calls / month</div>
+          <div class="pft">All analysis tools unlocked</div>
+          <div class="pft">FD + Insurance + Loan + MF tools</div>
+          <div class="pft">Up to 25 client portfolios</div>
+          <div class="pft">PDF reports &amp; exports</div>
+          <div class="pft">Email alerts &amp; digest</div>
+          <div class="pft">Priority support</div>
+        </div>
+        <button class="btn-pl bpl-f" onclick="handleSignup({preventDefault:()=>{}})">Start Free Trial →</button>
+      </div>
+      <div class="pc" data-reveal="right" data-d="3">
+        <div class="ptier">Custom Pricing</div>
+        <div class="pname">Enterprise</div>
+        <div class="pprice"><div class="pprice-n">Custom</div></div>
+        <div class="ptrial">14-day enterprise trial</div>
+        <div class="ptools"><div class="ptool">🏢 White-label</div><div class="ptool">🔌 Full API</div><div class="ptool">🤝 Dedicated CSM</div></div>
+        <div class="pdivd"></div>
+        <div class="pfts">
+          <div class="pft">Unlimited API calls</div>
+          <div class="pft">All Pro tools + enterprise add-ons</div>
+          <div class="pft">White-label dashboard</div>
+          <div class="pft">Unlimited portfolios</div>
+          <div class="pft">Webhook &amp; real-time events</div>
+          <div class="pft">RBI &amp; SEBI compliance reports</div>
+          <div class="pft">Dedicated SLA + 24/7 support</div>
+        </div>
+        <button class="btn-pl bpl-pu" onclick="handleAPIContact()">Contact Sales →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     WAITLIST
+══════════════════════════════════════ -->
+<section id="waitlist" class="sec">
+  <div class="ctr">
+    <div class="wl-in">
+      <div class="wl-card" data-reveal>
+        <div class="wl-cnt"><span class="pdot"></span><strong id="wl-num">2,841</strong> people already waiting</div>
+        <div class="sl">Join the Waitlist</div>
+        <h2 class="st">Be first when<br/><span style="color:var(--teal)">we launch.</span></h2>
+        <p style="color:var(--w40);font-size:.9rem;margin-top:9px;line-height:1.72">Get early access, exclusive founding-member pricing, and a free portfolio audit worth ₹2,999 — completely free.</p>
+        <form class="wl-form" onsubmit="handleWaitlist(event)">
+          <input type="email" id="wl-email" class="wl-in2" placeholder="Enter your email address" required/>
+          <button type="submit" class="btn-wl">Join Waitlist →</button>
+        </form>
+        <div class="wl-note">No spam. Unsubscribe anytime. 🔒 Privacy protected.</div>
+        <div class="wl-perks">
+          <div class="wperk"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Free portfolio audit</div>
+          <div class="wperk"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Priority access</div>
+          <div class="wperk"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>7-day free trial</div>
+          <div class="wperk"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Founding member price</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     EQUITY / SCRATCH
+══════════════════════════════════════ -->
+<section id="equity" class="sec">
+  <div class="eq-bg">
+    <div class="scrl"></div><div class="scrl"></div><div class="scrl"></div>
+    <div class="scrl"></div><div class="scrl"></div><div class="scrl"></div>
+  </div>
+  <div class="ctr">
+    <div class="tc" data-reveal>
+      <div class="sport-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Equity Opportunities
+      </div>
+      <h2 class="st wc-heading">Scratch to reveal<br/><span style="color:var(--gold)">your opportunity</span></h2>
+      <p class="ss" style="margin:0 auto;text-align:center">Join as mentor, validator, or co-builder — in exchange for real equity in BachatBeat.</p>
+    </div>
+    <div class="eq-cards">
+      <div class="eqc" data-reveal="left" data-d="1" onclick="revealCard(this)">
+        <div class="eq-scr"><div class="si">🪙</div><div class="sh">Scratch to reveal</div></div>
+        <div class="eq-in">
+          <div class="et et-m">🎓 Mentor</div>
+          <h3>Guide the Vision</h3>
+          <p>Industry veterans — fintech builders, investment experts — spend 2 hrs/month with us. Shape product strategy and investor narrative in exchange for equity.</p>
+          <div class="eq-ft"><div><div class="eq-lbl">Equity Range</div><div class="eq-pct">0.1% – 0.5%</div></div></div>
+          <button class="btn-eq" onclick="applyEquity(event,'Mentor')">Apply as Mentor →</button>
+        </div>
+      </div>
+      <div class="eqc" data-reveal data-d="2" onclick="revealCard(this)">
+        <div class="eq-scr"><div class="si">🔬</div><div class="sh">Scratch to reveal</div></div>
+        <div class="eq-in">
+          <div class="et et-v">⚗️ Validate</div>
+          <h3>Test the Product</h3>
+          <p>RIAs, CAs, and financial planners who stress-test BachatBeat with real client portfolios. Your feedback shapes v1 — and earns you equity.</p>
+          <div class="eq-ft"><div><div class="eq-lbl">Equity Range</div><div class="eq-pct">0.05% – 0.25%</div></div></div>
+          <button class="btn-eq" onclick="applyEquity(event,'Validator')">Apply as Validator →</button>
+        </div>
+      </div>
+      <div class="eqc" data-reveal="right" data-d="3" onclick="revealCard(this)">
+        <div class="eq-scr"><div class="si">🚀</div><div class="sh">Scratch to reveal</div></div>
+        <div class="eq-in">
+          <div class="et et-j">⚡ Join</div>
+          <h3>Build with Us</h3>
+          <p>Engineers, designers, growth hackers — full or part-time. Pre-seed, mission-driven, building for 300M Indian middle-class families.</p>
+          <div class="eq-ft"><div><div class="eq-lbl">Equity Range</div><div class="eq-pct">0.5% – 4.0%</div></div></div>
+          <button class="btn-eq" onclick="applyEquity(event,'Team Member')">Apply to Join →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     API / ENTERPRISE
+══════════════════════════════════════ -->
+<section id="api" class="sec">
+  <div class="ctr">
+    <div class="tc" data-reveal>
+      <div class="api-tag">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        BachatBeat API — Enterprise
+      </div>
+      <h2 class="st wc-heading">Embed trapped capital intelligence<br/>into your platform</h2>
+      <p class="ss" style="margin:0 auto;text-align:center">Banks, wealth platforms, and insurers can detect trapped capital at scale using our sub-200ms REST API.</p>
+    </div>
+    <div class="api-lay">
+      <div data-reveal="left">
+        <div class="cwin">
+          <div class="cwin-bar">
+            <div class="md" style="background:#ff5f57"></div>
+            <div class="md" style="background:#ffbd2e"></div>
+            <div class="md" style="background:#28c840"></div>
+            <div class="ctabs">
+              <div class="ctab act" onclick="switchTab(this,'js')">JavaScript</div>
+              <div class="ctab" onclick="switchTab(this,'py')">Python</div>
+              <div class="ctab" onclick="switchTab(this,'curl')">cURL</div>
+            </div>
+          </div>
+          <div class="cdbody" id="cdbody">
+            <div class="cl"><span class="cln">1</span><span class="cm">// BachatBeat API — Portfolio Analysis</span></div>
+            <div class="cl"><span class="cln">2</span></div>
+            <div class="cl"><span class="cln">3</span><span class="kw">import</span> { <span class="obj">BachatBeatClient</span> } <span class="kw">from</span> <span class="str">'@bachatbeat/sdk'</span>;</div>
+            <div class="cl"><span class="cln">4</span></div>
+            <div class="cl"><span class="cln">5</span><span class="kw">const</span> <span class="obj">bb</span> = <span class="kw">new</span> <span class="fn">BachatBeatClient</span>({ apiKey: <span class="str">'bb_live_xxx'</span> });</div>
+            <div class="cl"><span class="cln">6</span></div>
+            <div class="cl"><span class="cln">7</span><span class="kw">const</span> <span class="obj">result</span> = <span class="kw">await</span> bb.<span class="fn">analyzePortfolio</span>({</div>
+            <div class="cl"><span class="cln">8</span>&nbsp;&nbsp;userId: <span class="str">'user_12345'</span>,</div>
+            <div class="cl"><span class="cln">9</span>&nbsp;&nbsp;instruments: [<span class="str">'insurance'</span>,<span class="str">'fd'</span>,<span class="str">'mf'</span>,<span class="str">'loans'</span>]</div>
+            <div class="cl"><span class="cln">10</span>});</div>
+            <div class="cl"><span class="cln">11</span></div>
+            <div class="cl"><span class="cln">12</span><span class="cm">// Returns detailed trapped capital breakdown</span></div>
+            <div class="cl"><span class="cln">13</span>console.<span class="fn">log</span>(result.<span class="obj">trappedCapital</span>);</div>
+            <div class="cl"><span class="cln">14</span><span class="cm">// → { total: 420000, insurance: 280000, fd: 90000 }</span></div>
+          </div>
+        </div>
+        <div class="api-plans">
+          <div class="ap">
+            <div class="ap-n">Free Tier</div>
+            <div class="ap-p">₹0 <span>/ month</span></div>
+            <div class="ap-t">100 API calls included</div>
+            <div class="ap-fs">
+              <div class="apf">100 API calls/month</div>
+              <div class="apf">Basic trapped capital scan</div>
+              <div class="apf">JSON export</div>
+              <div class="apf">Community support</div>
+            </div>
+            <button class="btn-pl bpl-o" onclick="handleSignup({preventDefault:()=>{}})">Start Free</button>
+          </div>
+          <div class="ap feat">
+            <div class="ap-n">Enterprise</div>
+            <div class="ap-p">Custom</div>
+            <div class="ap-t">14-day enterprise trial</div>
+            <div class="ap-fs">
+              <div class="apf">Unlimited API calls</div>
+              <div class="apf">Deep scan engine + webhooks</div>
+              <div class="apf">White-label dashboard</div>
+              <div class="apf">Dedicated SLA + support</div>
+            </div>
+            <button class="btn-pl bpl-pu" onclick="handleAPIContact()">Contact Sales</button>
+          </div>
+        </div>
+      </div>
+      <div data-reveal="right">
+        <h3 style="font-family:var(--fb);font-size:1.65rem;font-weight:800;letter-spacing:-.03em;margin-bottom:9px">Built for fintech at scale</h3>
+        <p style="color:var(--w40);font-size:.86rem;line-height:1.76;margin-bottom:6px">The BachatBeat API powers trapped capital intelligence for banks, NBFCs, wealth platforms, and insurance aggregators.</p>
+        <div class="api-feats">
+          <div class="af"><div class="af-i">⚡</div><div class="af-t"><h4>&lt;200ms Response Time</h4><p>Real-time portfolio analysis on distributed Indian infrastructure.</p></div></div>
+          <div class="af"><div class="af-i">🔐</div><div class="af-t"><h4>RBI &amp; SEBI Compliant</h4><p>Data residency in India, audit logs, ISO 27001 certified pipeline.</p></div></div>
+          <div class="af"><div class="af-i">🔌</div><div class="af-t"><h4>SDKs for Every Stack</h4><p>Node.js, Python, Java, Go. Full OpenAPI 3.0 documentation included.</p></div></div>
+          <div class="af"><div class="af-i">📡</div><div class="af-t"><h4>Webhooks &amp; Real-time Events</h4><p>Push notifications when a user's portfolio health changes.</p></div></div>
+          <div class="af"><div class="af-i">🔍</div><div class="af-t"><h4>Deep Instrument Analysis</h4><p>Instrument-level breakdown for insurance, FD, MF, and loan portfolios.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     COMING SOON (3 items only)
+══════════════════════════════════════ -->
+<section id="coming" class="sec">
+  <div class="ctr">
+    <div class="tc" data-reveal>
+      <div class="sl">Roadmap</div>
+      <div class="sep c"></div>
+      <h2 class="st">What's coming <span style="color:var(--purple)">next</span></h2>
+      <p class="ss" style="margin:0 auto">We're building the future of Indian personal finance. Here's what's on our roadmap.</p>
+    </div>
+    <div class="com-grid">
+      <div class="com-card" data-reveal="left" data-d="1">
+        <div class="cs-tag">🚧 In Development</div>
+        <div class="com-ico">🌐</div>
+        <h4>BachatBeat for NRIs</h4>
+        <p>Multi-currency portfolio tracking, NRE/NRO FD analysis, FEMA-compliant repatriation optimisation, and DTAA advisory for Non-Resident Indians.</p>
+        <div class="com-q">Coming Q1 2026</div>
+      </div>
+      <div class="com-card" data-reveal data-d="2">
+        <div class="cs-tag">🚧 In Development</div>
+        <div class="com-ico">🔗</div>
+        <h4>Broker &amp; AMC Direct Connect</h4>
+        <p>Direct API integrations with Zerodha, Groww, CAMS, and 40+ AMCs for real-time portfolio sync — no manual statement uploads.</p>
+        <div class="com-q">Coming Q1 2026</div>
+      </div>
+      <div class="com-card" data-reveal="right" data-d="3">
+        <div class="cs-tag">🚧 In Development</div>
+        <div class="com-ico">📊</div>
+        <h4>Tax Optimisation Engine</h4>
+        <p>Real-time tax-loss harvesting, LTCG optimisation, and 26AS auto-reconciliation for your entire portfolio — built for the Indian tax system.</p>
+        <div class="com-q">Coming Q4 2025</div>
+      </div>
+      <div class="com-card" data-reveal="left" data-d="4">
+        <div class="cs-tag">🚧 Research Phase</div>
+        <div class="com-ico">⚖️</div>
+        <h4>Legal Valuation Report</h4>
+        <p>Court-ready financial impact valuation reports for divorce, inheritance, and business separation settlements.</p>
+        <div class="com-q">Coming 2026</div>
+      </div>
+      <div class="com-card" data-reveal data-d="5">
+        <div class="cs-tag">🚧 Research Phase</div>
+        <div class="com-ico">🏢</div>
+        <h4>Corporate HR Module</h4>
+        <p>Bulk analysis tools for HR teams to offer employee financial health checks and optimise EPF/VPF allocations as a corporate perk.</p>
+        <div class="com-q">Coming 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FAQ
+══════════════════════════════════════ -->
+<section id="faq" class="sec">
+  <div class="ctr faq-in">
+    <div class="tc" data-reveal style="margin-bottom:48px">
+      <div class="sl">Frequently Asked</div>
+      <div class="sep c"></div>
+      <h2 class="st">Got questions?<br/><em style="font-style:italic;color:var(--w60)">We've got answers.</em></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faqitem" data-reveal data-d="1">
+        <button class="faq-q" onclick="toggleFaq(this)">What exactly is "trapped capital"?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-ans"><div class="faq-ans-in">Trapped capital is money locked in financial instruments earning returns below inflation or your risk-adjusted opportunity cost — traditional endowments, ULIPs, low-yield FDs, underperforming SIPs, and inefficient EMIs. BachatBeat quantifies exactly how much you're losing and what you could earn instead.</div></div>
+      </div>
+      <div class="faqitem" data-reveal data-d="2">
+        <button class="faq-q" onclick="toggleFaq(this)">How does the 7-day free trial work?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-ans"><div class="faq-ans-in">Sign up with your email — no credit card needed. You get full Pro access for 7 days. After the trial, choose to continue on a paid plan, downgrade to the free tier (100 API calls/month), or cancel entirely. No charges, no surprises.</div></div>
+      </div>
+      <div class="faqitem" data-reveal data-d="3">
+        <button class="faq-q" onclick="toggleFaq(this)">Is BachatBeat safe? Do you store my financial data?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-ans"><div class="faq-ans-in">Security is our highest priority. We use 256-bit AES encryption, TLS 1.3 in transit, and request only read-only access. We never store raw credentials. All data is encrypted at rest on India-based servers. We're working toward ISO 27001 certification and full RBI compliance.</div></div>
+      </div>
+      <div class="faqitem" data-reveal data-d="4">
+        <button class="faq-q" onclick="toggleFaq(this)">What is tools-based pricing?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-ans"><div class="faq-ans-in">Instead of one fixed price for everything, tools-based pricing lets you activate only the modules you need — Insurance Analyser, FD Comparator, Loan Tool, MF Benchmarker, Tax Optimiser, etc. The Pro plan includes all tools; enterprise can add or remove specific modules based on use case.</div></div>
+      </div>
+      <div class="faqitem" data-reveal data-d="5">
+        <button class="faq-q" onclick="toggleFaq(this)">How does the equity collaboration model work?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-ans"><div class="faq-ans-in">We offer equity to three contributor types: Mentors (0.1–0.5%), Validators (0.05–0.25%), and Builders (0.5–4%). All equity is ESOP-structured with standard vesting. Contact aryanpatejee2025@gmail.com to explore specifics.</div></div>
+      </div>
+      <div class="faqitem" data-reveal data-d="6">
+        <button class="faq-q" onclick="toggleFaq(this)">When will BachatBeat launch publicly?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-ans"><div class="faq-ans-in">Currently in closed beta with select RIAs and CAs. Public launch is planned for Q4 2025. Waitlist members get early access before public launch, a free portfolio audit, and founding-member pricing locked in forever.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     CONTACT
+══════════════════════════════════════ -->
+<section id="contact" class="sec">
+  <div class="cgl"></div>
+  <div class="ctr cont-in">
+    <div data-reveal>
+      <div class="sl">Contact</div>
+      <div class="sep c"></div>
+      <h2 class="st">Let's talk <span style="color:var(--teal)">money</span></h2>
+      <p style="color:var(--w40);font-size:.9rem;margin-top:10px;line-height:1.75">Questions, partnerships, press — reach the founder directly. We respond within 24 hours.</p>
+      <a href="mailto:help@bachatbeat.com" class="cont-email">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        help@bachatbeat.com
+      </a>
+      <div style="display:flex;justify-content:center;margin-top:22px">
+        <div class="founder-card">
+          <div class="founder-photo">
+            <img src="founder.jpg" alt="Aryan Patel"/>
+          </div>
+          <div>
+            <div class="founder-name">Aryan Patel</div>
+            <div class="founder-role">Founder &amp; CEO, BachatBeat</div>
+            <a href="mailto:aryanpatejee2025@gmail.com" class="founder-email">aryanpatejee2025@gmail.com</a>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:26px;font-size:.78rem;color:rgba(255,255,255,.28)">
+        Interested in <a href="#equity" style="color:var(--teal)">mentoring or joining?</a> ·
+        Explore the <a href="#api" style="color:var(--teal)">Enterprise API</a> ·
+        <a href="#pricing" style="color:var(--teal)">View pricing</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <div>
+    <div class="foot-brand">BachatBeat</div>
+    <div class="foot-sub">© 2025 BachatBeat. Building India's financial health layer.</div>
+  </div>
+  <div class="foot-links">
+    <a href="#" class="foot-link">Privacy</a>
+    <a href="#" class="foot-link">Terms</a>
+    <a href="#pricing" class="foot-link">Pricing</a>
+    <a href="mailto:help@bachatbeat.com" class="foot-link">Contact</a>
+    <a href="#api" class="foot-link">API Docs</a>
+    <a href="#coming" class="foot-link">Roadmap</a>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════
+     LOGIN MODAL
+══════════════════════════════════════ -->
+<div class="modal-ov" id="login-modal">
+  <div class="modal">
+    <div class="modal-cls" onclick="closeLogin()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+    <div class="card-logo">
+      <div class="card-logo-img"><img src="logo.jpg" alt=""/></div>
+      <span class="card-brand">BachatBeat</span>
+    </div>
+    <div class="trial-rb">
+      <div class="trial-rb-ico">7D</div>
+      <div class="trial-rb-txt">7-day free trial on first login</div>
+    </div>
+    <div class="login-title" style="font-size:1.35rem">Welcome back</div>
+    <div class="login-sub">Sign in to your BachatBeat account</div>
+    <form onsubmit="handleLogin(event)" style="margin-top:20px">
+      <div class="ff"><label class="fl" for="le">Email</label><input type="email" id="le" class="fi" placeholder="you@example.com" required/></div>
+      <div class="ff"><label class="fl" for="lp">Password</label><input type="password" id="lp" class="fi" placeholder="Your password" required/></div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><a href="#" style="font-size:.76rem;color:var(--teal)">Forgot password?</a></div>
+      <button type="submit" class="btn-f">Sign In →</button>
+    </form>
+    <div class="fdiv">or</div>
+    <button class="btn-soc" onclick="handleLogin({preventDefault:()=>{}})">
+      <svg width="15" height="15" viewBox="0 0 24 24"><path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115z"/><path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987z"/><path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21z"/><path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067z"/></svg>
+      Continue with Google
+    </button>
+    <p style="text-align:center;margin-top:16px;font-size:.76rem;color:rgba(255,255,255,.3)">No account? <a href="#login-s" style="color:var(--teal)" onclick="closeLogin()">Sign up free</a></p>
+  </div>
+</div>
+<div class="toast" id="toast"><span id="tmsg">Done!</span></div>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+/* ── Custom cursor ── */
+const ring = document.getElementById('cur-ring');
+const dot  = document.getElementById('cur-dot');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx+'px'; dot.style.top=my+'px';
+});
+(function animCur(){
+  rx+=(mx-rx)*.11; ry+=(my-ry)*.11;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animCur);
+})();
+document.querySelectorAll('a,button,input,select,.eqc,.faq-q,.cap-card,.pc').forEach(el => {
+  el.addEventListener('mouseenter',()=>ring.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>ring.classList.remove('hov'));
+});
+document.addEventListener('click', e => {
+  ring.classList.add('clk'); setTimeout(()=>ring.classList.remove('clk'),200);
+  if(Math.random()>.45) spawnCoin(e.clientX,e.clientY);
+});
+function spawnCoin(x,y){
+  const coins=['🪙','💰','₹','💵'];
+  const c=document.createElement('div'); c.className='coin-pop';
+  c.textContent=coins[Math.floor(Math.random()*coins.length)];
+  c.style.left=x+'px'; c.style.top=y+'px';
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),900);
+}
+
+/* ── Parallax coin ── */
+const fcoin=document.getElementById('float-coin');
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY;
+  const max=document.body.scrollHeight-window.innerHeight;
+  const p=Math.min(s/max, 1);
+  const y=-50+(p*65);
+  const x=Math.sin(p*Math.PI*4)*30; // sine wave track
+  const rot=p*720; // 2 full rotations
+  fcoin.style.transform=`translate(${x}px, ${y}%) rotate(${rot}deg)`;
+  fcoin.style.opacity=Math.max(0,1-p*1.6);
+},{ passive:true });
+
+/* ── Scroll reveal ── */
+const ro=new IntersectionObserver(e=>{
+  e.forEach(i=>{ if(i.isIntersecting) i.target.classList.add('vis'); });
+},{threshold:.1,rootMargin:'0px 0px -38px 0px'});
+document.querySelectorAll('[data-reveal]').forEach(el=>ro.observe(el));
+
+/* ── Navbar scroll ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('sc',window.scrollY>40);
+},{passive:true});
+
+/* ── Counter animation ── */
+function animCtr(el){
+  const t=parseFloat(el.dataset.t);
+  const dec=t%1!==0;
+  const s=performance.now();const d=1800;
+  (function u(now){
+    const p=Math.min((now-s)/d,1);
+    const e=1-Math.pow(1-p,3);
+    el.textContent=dec?(t*e).toFixed(1):Math.round(t*e);
+    if(p<1)requestAnimationFrame(u);
+  })(performance.now());
+}
+const co=new IntersectionObserver(e=>{
+  e.forEach(i=>{ if(i.isIntersecting){animCtr(i.target);co.unobserve(i.target);} });
+},{threshold:.5});
+document.querySelectorAll('.counter').forEach(el=>co.observe(el));
+
+/* ── Waitlist counter ── */
+let wlc=2841;
+setInterval(()=>{
+  if(Math.random()>.55){ wlc+=Math.floor(Math.random()*3)+1;
+    const el=document.getElementById('wl-num');
+    if(el) el.textContent=wlc.toLocaleString('en-IN'); }
+},4500);
+
+/* ── Particles ── */
+const pc=document.getElementById('particles');
+for(let i=0;i<22;i++){
+  const p=document.createElement('div'); p.className='ptl';
+  p.style.cssText=`left:${Math.random()*100}%;animation-delay:${Math.random()*9}s;animation-duration:${7+Math.random()*6}s;width:${1+Math.random()*3}px;height:${1+Math.random()*3}px;`;
+  pc.appendChild(p);
+}
+
+/* ── FAQ ── */
+function toggleFaq(btn){
+  const item=btn.closest('.faqitem');
+  const open=item.classList.contains('op');
+  document.querySelectorAll('.faqitem.op').forEach(i=>i.classList.remove('op'));
+  if(!open) item.classList.add('op');
+}
+
+/* ── Equity scratch ── */
+function revealCard(card){card.classList.add('rev');}
+function applyEquity(e,type){
+  e.stopPropagation();
+  showToast('✉️ Opening application email…');
+  setTimeout(()=>{
+    window.location.href=`mailto:aryanpatejee2025@gmail.com?subject=BachatBeat ${type} Application&body=Hi Aryan, I'd love to apply as a ${type}.%0A%0ABrief intro:%0A`;
+  },700);
+}
+
+/* ── Login modal ── */
+function openLogin(){ document.getElementById('login-modal').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeLogin(){ document.getElementById('login-modal').classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('login-modal').addEventListener('click',function(e){ if(e.target===this) closeLogin(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLogin(); });
+
+/* ── Form handlers ── */
+function handleSignup(e){
+  e.preventDefault();
+  const fnInput = document.getElementById('fn');
+  if(fnInput && fnInput.value) localStorage.setItem('bb_user', fnInput.value);
+  else localStorage.setItem('bb_user', 'Aryan');
+  showToast('🎉 Account created! Redirecting to dashboard…');
+  setTimeout(()=>{ window.location.href='index.html'; },1400);
+}
+function handleLogin(e){
+  e.preventDefault(); closeLogin();
+  localStorage.setItem('bb_user', 'Aryan');
+  showToast('👋 Welcome back! Opening dashboard…');
+  setTimeout(()=>{ window.location.href='index.html'; },1400);
+}
+function handleWaitlist(e){
+  e.preventDefault();
+  const email=document.getElementById('wl-email').value;
+  wlc++; document.getElementById('wl-num').textContent=wlc.toLocaleString('en-IN');
+  document.getElementById('wl-email').value='';
+  showToast(`🚀 You're on the waitlist! Check ${email} for confirmation.`);
+}
+function handleAPIContact(){
+  window.location.href='mailto:aryanpatejee2025@gmail.com?subject=BachatBeat Enterprise API&body=Hi Aryan, I am interested in the BachatBeat API.%0A%0ACompany:%0AUse case:%0AExpected volume:';
+}
+
+/* ── Toast ── */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('tmsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),4200);
+}
+
+/* ── Code tabs ── */
+const snippets={
+  js:`<div class="cl"><span class="cln">1</span><span class="cm">// BachatBeat API — Portfolio Analysis</span></div>
+<div class="cl"><span class="cln">3</span><span class="kw">import</span> { <span class="obj">BachatBeatClient</span> } <span class="kw">from</span> <span class="str">'@bachatbeat/sdk'</span>;</div>
+<div class="cl"><span class="cln">5</span><span class="kw">const</span> <span class="obj">bb</span> = <span class="kw">new</span> <span class="fn">BachatBeatClient</span>({ apiKey: <span class="str">'bb_live_xxx'</span> });</div>
+<div class="cl"><span class="cln">6</span><span class="kw">const</span> <span class="obj">r</span> = <span class="kw">await</span> bb.<span class="fn">analyzePortfolio</span>({ userId: <span class="str">'user_123'</span> });</div>
+<div class="cl"><span class="cln">7</span>console.<span class="fn">log</span>(r.<span class="obj">trappedCapital</span>); <span class="cm">// → { total: 420000 }</span></div>`,
+  py:`<div class="cl"><span class="cln">1</span><span class="kw">from</span> bachatbeat <span class="kw">import</span> BachatBeatClient</div>
+<div class="cl"><span class="cln">3</span>bb = <span class="fn">BachatBeatClient</span>(api_key=<span class="str">"bb_live_xxx"</span>)</div>
+<div class="cl"><span class="cln">5</span>result = bb.<span class="fn">analyze_portfolio</span>(user_id=<span class="str">"user_123"</span>)</div>
+<div class="cl"><span class="cln">6</span><span class="fn">print</span>(result[<span class="str">"trapped_capital"</span>])</div>
+<div class="cl"><span class="cln">7</span><span class="cm"># → {'total': 420000, 'insurance': 280000}</span></div>`,
+  curl:`<div class="cl"><span class="cln">1</span><span class="fn">curl</span> -X POST https://api.bachatbeat.com/v1/analyze \\</div>
+<div class="cl"><span class="cln">2</span>&nbsp;&nbsp;-H <span class="str">"Authorization: Bearer bb_live_xxx"</span> \\</div>
+<div class="cl"><span class="cln">3</span>&nbsp;&nbsp;-d <span class="str">'{"userId":"user_123"}'</span></div>
+<div class="cl"><span class="cln">5</span><span class="cm"># → {"trappedCapital":{"total":420000}}</span></div>`
+};
+function switchTab(tab,lang){
+  document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('act'));
+  tab.classList.add('act');
+  document.getElementById('cdbody').innerHTML=snippets[lang];
+}
+</script>
+</body>
+</html>

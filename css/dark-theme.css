@@ -1,0 +1,275 @@
+/* ============================================================
+   BachatBeat — dark-theme.css
+   Teal/Navy Theme Override (with FIFA World Cup Aesthetics)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Barlow+Condensed:ital,wght@0,500;0,700;0,800;0,900;1,700&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* Teal/Navy tokens */
+  --color-bg:           #080f1e;
+  --color-card:         #0d1626;
+  --color-card-2:       #101c30;
+  --color-text:         #f0f4ff;
+  --color-text-muted:   rgba(240,244,255,0.55);
+  --color-text-faint:   rgba(240,244,255,0.30);
+  --color-border:       rgba(0,229,176,0.14);
+  --color-border-faint: rgba(255,255,255,0.07);
+  --color-sage:         rgba(255,255,255,0.04);
+  --color-sage-dark:    rgba(255,255,255,0.06);
+  --color-white:        #0d1626;
+  --color-emerald:      #00e5b0;
+  --color-emerald-dark: #080f1e;
+  --color-teal:         #00e5b0;
+  --color-teal-light:   #00ffca;
+  --color-amber:        #f5c842;
+  --color-amber-light:  rgba(245,200,66,0.12);
+  --color-red:          #ff5a7e;
+  --color-red-light:    rgba(255,90,126,0.10);
+  --color-green:        #00e5b0;
+  --color-green-light:  rgba(0,229,176,0.08);
+  --color-purple:       #9b7bfa;
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.4);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.5);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.6);
+  --font-body:  'Inter', system-ui, sans-serif;
+  --font-mono:  'JetBrains Mono', monospace;
+  --font-heading: 'Barlow Condensed', 'Syne', sans-serif;
+}
+
+/* ── Global resets ── */
+html, body { background: var(--color-bg) !important; color: var(--color-text); }
+::selection { background: #00e5b0; color: #080f1e; }
+::-webkit-scrollbar-thumb { background: rgba(0,229,176,0.2); }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,229,176,0.4); }
+
+/* ── World Cup Specific Additions to Dashboard ── */
+body::after {
+  /* Hexagon faint pattern overlay on dashboard */
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='92'%3E%3Cpolygon points='40,2 74,21 74,71 40,90 6,71 6,21' fill='none' stroke='rgba(0,229,176,1)' stroke-width='1'/%3E%3Cpolygon points='0,46 34,65 34,115 0,134 -34,115 -34,65' fill='none' stroke='rgba(0,229,176,1)' stroke-width='1'/%3E%3Cpolygon points='80,46 114,65 114,115 80,134 46,115 46,65' fill='none' stroke='rgba(0,229,176,1)' stroke-width='1'/%3E%3C/svg%3E");
+  opacity: 0.02;
+}
+
+h1, h2, .screen-title {
+  font-family: var(--font-heading) !important;
+  font-style: italic;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.stat-value, .metric-value, .card-value {
+  font-family: var(--font-heading) !important;
+  font-style: italic;
+  font-weight: 900 !important;
+  color: var(--color-teal) !important;
+  text-shadow: 0 0 16px rgba(0,229,176,0.3);
+}
+
+.metric-label, .stat-label {
+  font-family: var(--font-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+/* ── Sidebar ── */
+#sidebar {
+  background: rgba(13,22,38,0.85) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(0,229,176,0.1);
+  position: relative; z-index: 10;
+}
+.sidebar-logo {
+  border-bottom: 1px solid rgba(0,229,176,0.1) !important;
+}
+.sidebar-logo-name {
+  font-family: var(--font-heading) !important;
+  font-style: italic;
+  font-size: 1.4rem !important;
+  text-transform: uppercase;
+}
+.sidebar-logo-icon {
+  background: transparent !important;
+  border: 1px solid rgba(0,229,176,0.2);
+}
+.nav-group-label { color: rgba(0,229,176,0.35) !important; letter-spacing: 0.1em; }
+.nav-item { color: rgba(255,255,255,0.5) !important; }
+.nav-item:hover { background: rgba(0,229,176,0.06) !important; color: #fff !important; }
+.nav-item.active { background: rgba(0,229,176,0.12) !important; color: #00e5b0 !important; }
+.nav-item.active::before { background: #00e5b0 !important; }
+.nav-badge { background: #00e5b0 !important; color: #080f1e !important; }
+.sidebar-footer { border-top: 1px solid rgba(0,229,176,0.1) !important; }
+.sidebar-toggle-btn { background: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.4) !important; }
+.sidebar-toggle-btn:hover { background: rgba(0,229,176,0.1) !important; color: #00e5b0 !important; }
+
+/* ── Topbar ── */
+#topbar {
+  background: rgba(8,15,30,0.92) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,229,176,0.1) !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.4) !important;
+  position: relative; z-index: 9;
+}
+.topbar-search input {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: #fff !important;
+}
+.topbar-search input::placeholder { color: rgba(255,255,255,0.25) !important; }
+.topbar-search input:focus {
+  background: rgba(0,229,176,0.06) !important;
+  border-color: #00e5b0 !important;
+  box-shadow: 0 0 0 3px rgba(0,229,176,0.1) !important;
+}
+.topbar-search-icon { color: rgba(255,255,255,0.3) !important; }
+.topbar-role-badge {
+  background: rgba(0,229,176,0.08) !important;
+  border-color: rgba(0,229,176,0.2) !important;
+  color: #00e5b0 !important;
+}
+.topbar-date { color: rgba(255,255,255,0.35) !important; }
+.topbar-profile:hover { background: rgba(255,255,255,0.05) !important; }
+.topbar-profile-name { color: #fff !important; }
+.topbar-profile-role { color: rgba(255,255,255,0.45) !important; }
+.topbar-avatar {
+  background: linear-gradient(135deg, #00e5b0, #00c99a) !important;
+}
+
+/* ── Dropdown ── */
+.topbar-profile-dropdown {
+  background: #0d1626 !important;
+  border-color: rgba(0,229,176,0.15) !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.7) !important;
+}
+.dropdown-item { color: rgba(255,255,255,0.7) !important; }
+.dropdown-item:hover { background: rgba(0,229,176,0.07) !important; color: #fff !important; }
+.dropdown-item svg { color: rgba(255,255,255,0.35) !important; }
+.dropdown-divider { background: rgba(255,255,255,0.07) !important; }
+
+/* ── Main content ── */
+#main-content { background: var(--color-bg); position: relative; z-index: 1; }
+#onboarding-overlay { background: rgba(8,15,30,0.95) !important; backdrop-filter: blur(8px); }
+
+/* ── Cards (Bento style) ── */
+.card, [class*="card"] {
+  background: rgba(13,22,38,0.7) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,229,176,0.12) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+/* ── Onboarding card (login/signup on dashboard) ── */
+.onboard-card {
+  background: #0d1626 !important;
+  border: 1px solid rgba(0,229,176,0.15) !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6) !important;
+}
+.onboard-title { color: #fff !important; font-family: var(--font-heading); font-style: italic; text-transform: uppercase; }
+.onboard-subtitle { color: rgba(255,255,255,0.5) !important; }
+.onboard-brand { color: #00e5b0 !important; font-family: var(--font-heading); font-style: italic; text-transform: uppercase; }
+.onboard-tagline { color: rgba(255,255,255,0.35) !important; }
+.onboard-note { color: rgba(255,255,255,0.3) !important; }
+.role-preview {
+  background: rgba(0,229,176,0.06) !important;
+  border-color: rgba(0,229,176,0.2) !important;
+}
+.role-preview-text { color: rgba(255,255,255,0.7) !important; }
+.role-preview-icon { color: #00e5b0 !important; }
+
+/* ── Form elements ── */
+input[type="text"], input[type="email"], input[type="password"],
+input[type="tel"], input[type="number"], select, textarea {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #fff !important;
+}
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.25) !important; }
+input:focus, select:focus, textarea:focus {
+  border-color: #00e5b0 !important;
+  background: rgba(0,229,176,0.05) !important;
+  box-shadow: 0 0 0 3px rgba(0,229,176,0.1) !important;
+}
+label { color: rgba(255,255,255,0.65) !important; }
+
+/* ── Buttons ── */
+.btn-primary, button[class*="primary"] {
+  background: #00e5b0 !important;
+  color: #080f1e !important;
+  box-shadow: 0 4px 20px rgba(0,229,176,0.3) !important;
+  font-family: var(--font-heading);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; font-style: italic;
+}
+.btn-primary:hover { background: #00c99a !important; box-shadow: 0 8px 30px rgba(0,229,176,0.4) !important; }
+.btn-secondary, button[class*="secondary"] {
+  background: rgba(255,255,255,0.05) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+  color: rgba(255,255,255,0.8) !important;
+  font-family: var(--font-heading);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; font-style: italic;
+}
+.btn-secondary:hover { border-color: #00e5b0 !important; color: #00e5b0 !important; }
+
+/* ── Tables ── */
+table { border-color: rgba(0,229,176,0.1) !important; }
+th { background: rgba(0,229,176,0.05) !important; color: rgba(255,255,255,0.5) !important; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }
+td { color: rgba(255,255,255,0.75) !important; border-color: rgba(255,255,255,0.06) !important; }
+tr:hover td { background: rgba(0,229,176,0.03) !important; }
+
+/* ── Badges & pills ── */
+.badge, [class*="badge"] { font-size: 0.7rem; font-weight: 700; font-family: var(--font-heading); font-style: italic; letter-spacing: 0.05em; text-transform: uppercase;}
+[class*="badge-green"], [class*="badge-success"] {
+  background: rgba(0,229,176,0.12) !important;
+  color: #00e5b0 !important;
+}
+[class*="badge-amber"], [class*="badge-warn"] {
+  background: rgba(245,200,66,0.12) !important;
+  color: #f5c842 !important;
+}
+[class*="badge-red"], [class*="badge-danger"] {
+  background: rgba(255,90,126,0.12) !important;
+  color: #ff5a7e !important;
+}
+
+/* ── Charts / Progress bars ── */
+[class*="progress"] { background: rgba(255,255,255,0.06) !important; }
+[class*="progress-fill"], [class*="bar-fill"] {
+  background: linear-gradient(90deg, #00e5b0, #00c99a) !important;
+}
+
+/* ── Stat cards ── */
+[class*="stat-card"], [class*="metric"] {
+  background: rgba(13,22,38,0.7) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,229,176,0.1) !important;
+}
+
+/* ── Alerts / rows ── */
+.attention-row { border-color: rgba(255,255,255,0.06) !important; }
+.attention-row:hover { background: rgba(0,229,176,0.04) !important; }
+.attention-name { color: #fff !important; }
+.attention-reason { color: rgba(255,255,255,0.45) !important; }
+
+/* ── Avatars ── */
+.client-avatar, .profile-avatar-lg {
+  background: linear-gradient(135deg, #00e5b0, #00c99a) !important;
+}
+
+/* ── Mobile nav ── */
+#mobile-nav { background: #080f1e !important; border-top-color: rgba(0,229,176,0.1) !important; }
+.mobile-nav-item { color: rgba(255,255,255,0.45) !important; }
+.mobile-nav-item.active { color: #00e5b0 !important; }
+
+/* ── Misc text ── */
+.text-muted { color: rgba(255,255,255,0.45) !important; }
+.text-faint { color: rgba(255,255,255,0.28) !important; }
+.text-emerald, .text-teal { color: #00e5b0 !important; }
+.text-amber { color: #f5c842 !important; }
+.text-red { color: #ff5a7e !important; }
+a { color: #00e5b0; }
