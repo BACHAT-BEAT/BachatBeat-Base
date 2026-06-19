@@ -1,0 +1,32 @@
+/* ============================================================
+   BachatBeat — dark-theme.css
+   Kept minimal — no color overrides that fight the light palette.
+   Only animation keyframes that aren't already in animations.css.
+   ============================================================ */
+
+/* ── Topbar pulse line animation ── */
+@keyframes topbarPulseDraw {
+  from { stroke-dashoffset: 2000; }
+  to   { stroke-dashoffset: 0; }
+}
+
+#topbar-pulse svg path {
+  stroke: var(--color-teal);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: topbarPulseDraw 2s ease forwards 0.3s;
+  opacity: 0.35;
+}
+
+/* ── Score gauge circle animation ── */
+@keyframes gaugeStroke {
+  from { stroke-dashoffset: var(--start-offset, 300); }
+  to   { stroke-dashoffset: var(--target-offset, 0); }
+}
+
+.gauge-circle {
+  animation: gaugeStroke 1s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.5s;
+  stroke-dashoffset: 300;
+}

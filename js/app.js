@@ -19,9 +19,18 @@ const App = {
     // Check if already onboarded
     const savedRole = sessionStorage.getItem('bb_role');
     const savedFirm = sessionStorage.getItem('bb_firm');
+    const bbUser = localStorage.getItem('bb_user');
+
     if (savedRole) {
       this.state.role = savedRole;
       this.state.firmName = savedFirm || 'My Practice';
+      this.showDashboard();
+    } else if (bbUser) {
+      // Auto-onboard if logged in from landing page
+      this.state.role = 'advisor';
+      this.state.firmName = bbUser;
+      sessionStorage.setItem('bb_role', 'advisor');
+      sessionStorage.setItem('bb_firm', bbUser);
       this.showDashboard();
     } else {
       this.showOnboarding();
@@ -128,9 +137,9 @@ const App = {
     if (nameEl)  nameEl.textContent  = this.state.firmName;
     if (roleEl2) roleEl2.textContent = shortRole;
 
-    // Avatar initials
+    // Avatar — preserve the founder.jpg img tag if already present; don't overwrite with initials
     const avatarEl = document.getElementById('profile-avatar');
-    if (avatarEl) {
+    if (avatarEl && !avatarEl.querySelector('img')) {
       const words = this.state.firmName.split(' ');
       avatarEl.textContent = words.length >= 2
         ? words[0][0].toUpperCase() + words[1][0].toUpperCase()
@@ -251,9 +260,8 @@ const App = {
       </div>`;
   },
 
-  // Utility: render pulse SVG
+  // Utility: render pulse SVG (ECG heartbeat line)
   renderPulseSVG(width = 300, height = 30, color = 'var(--color-teal)') {
-    // ECG-like waveform path
     const mid = height / 2;
     const path = `M0,${mid} L${width*0.1},${mid} L${width*0.15},${mid - height*0.3} L${width*0.2},${mid + height*0.8} L${width*0.25},${mid - height*1.2} L${width*0.3},${mid + height*0.4} L${width*0.35},${mid} L${width*0.6},${mid} L${width*0.65},${mid - height*0.25} L${width*0.7},${mid + height*0.7} L${width*0.75},${mid - height*1.0} L${width*0.8},${mid + height*0.35} L${width*0.85},${mid} L${width},${mid}`;
     const pathLen = 800;
@@ -266,7 +274,7 @@ const App = {
       </svg>`;
   },
 
-  // Format rupee in Indian style
+  // Format rupee in Indian style (e.g. ₹12,45,000)
   formatRupee(amount, compact = false) {
     if (compact) {
       if (amount >= 10000000) return `₹${(amount/10000000).toFixed(1)}Cr`;
@@ -281,7 +289,6 @@ const App = {
     const container = document.getElementById('topbar-pulse');
     if (!container) return;
     const w = window.innerWidth;
-    const h = 2;
     const mid = 1;
     const path = `M0,${mid} L${w*0.08},${mid} L${w*0.09},${mid-8} L${w*0.10},${mid+8} L${w*0.11},${mid-14} L${w*0.12},${mid+6} L${w*0.13},${mid} L${w*0.5},${mid} L${w*0.51},${mid-6} L${w*0.52},${mid+7} L${w*0.53},${mid-12} L${w*0.54},${mid+5} L${w*0.55},${mid} L${w},${mid}`;
     container.innerHTML = `
